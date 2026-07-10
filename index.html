@@ -14,6 +14,7 @@
       --rk-bg2: #111111;
       --rk-accent: #D61B1B;
       --rk-accent2: #FF3B3B;
+      --rk-gold: #C9A84C;
       --rk-text: #FFFFFF;
       --rk-text2: #AFAFAF;
       --rk-border: rgba(255,255,255,0.08);
@@ -33,7 +34,6 @@
     ::-webkit-scrollbar-track { background: var(--rk-bg); }
     ::-webkit-scrollbar-thumb { background: var(--rk-accent); border-radius: 3px; }
 
-    /* Loading Screen */
     #loading-screen {
       position: fixed; inset: 0; z-index: 9999;
       background: #050505;
@@ -49,12 +49,10 @@
     .load-bar { height: 100%; background: linear-gradient(90deg, #D61B1B, #FF3B3B); border-radius: 1px; transition: width 0.3s ease; }
     .load-percent { margin-top: 12px; font-size: 12px; color: #666; font-family: 'Orbitron'; letter-spacing: 2px; }
 
-    /* Particles Canvas */
     #ember-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; opacity: 0.6; }
 
-    /* Navigation */
     .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; background: transparent; transition: all 0.4s ease; }
-    .navbar.scrolled { background: rgba(5,5,5,0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .navbar.scrolled { background: rgba(5,5,5,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.05); }
     .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
     .nav-logo svg { transition: transform 0.3s; }
     .nav-logo:hover svg { transform: scale(1.1); }
@@ -71,13 +69,11 @@
     .mobile-menu a { display: block; padding: 12px 0; color: #AFAFAF; text-decoration: none; font-size: 14px; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.05); }
     .mobile-menu a:last-child { border-bottom: none; }
 
-    /* Section Styles */
     .section { position: relative; padding: 120px 64px; z-index: 1; }
     .section-inner { max-width: 1400px; margin: 0 auto; }
     .section-subtitle { font-size: 12px; color: #D61B1B; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 12px; font-family: 'Space Grotesk'; font-weight: 500; }
     .section-title { font-family: 'Orbitron'; font-size: clamp(28px, 4vw, 48px); font-weight: 700; color: #fff; letter-spacing: 2px; text-transform: uppercase; }
 
-    /* Hero */
     .hero { position: relative; min-height: 100vh; display: flex; align-items: center; padding: 120px 64px 80px; overflow: hidden; }
     .hero-bg { position: absolute; inset: 0; z-index: -1; background: radial-gradient(ellipse at 70% 50%, rgba(214,27,27,0.08) 0%, transparent 60%), radial-gradient(ellipse at 30% 80%, rgba(255,59,59,0.05) 0%, transparent 50%), linear-gradient(180deg, #050505 0%, #0a0a0a 50%, #050505 100%); }
     .hero-fade { position: absolute; bottom: 0; left: 0; right: 0; height: 300px; background: linear-gradient(to top, #050505, transparent); }
@@ -99,13 +95,13 @@
     @keyframes scrollBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
     .hero-artwork { position: relative; display: flex; justify-content: center; align-items: center; }
     .hero-artwork-inner { position: relative; width: 100%; max-width: 500px; aspect-ratio: 3/4; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); }
-    .hero-artwork-bg { width: 100%; height: 100%; background: linear-gradient(135deg, #1a0a0a, #0a0a0a, #1a0505); display: flex; align-items: center; justify-content: center; }
+    .hero-artwork-bg { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+    .hero-artwork-bg img { width: 100%; height: 100%; object-fit: cover; }
     .hero-artwork-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(5,5,5,0.9) 100%); z-index: 1; }
     .hero-badge { position: absolute; top: 20px; right: 20px; z-index: 2; width: 40px; height: 40px; border: 1px solid rgba(214,27,27,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
     .hero-ring-1 { position: absolute; top: -20px; right: -20px; width: 100px; height: 100px; border: 1px solid rgba(214,27,27,0.15); border-radius: 50%; }
     .hero-ring-2 { position: absolute; bottom: -30px; left: -30px; width: 150px; height: 150px; border: 1px solid rgba(214,27,27,0.1); border-radius: 50%; }
 
-    /* Animations */
     .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
     .reveal-left { opacity: 0; transform: translateX(-40px); transition: all 0.8s ease; }
@@ -115,13 +111,64 @@
     .reveal-scale { opacity: 0; transform: scale(0.8); transition: all 0.8s ease; }
     .reveal-scale.visible { opacity: 1; transform: scale(1); }
 
-    /* Project Cards */
+    .tabs-container { position: relative; }
+    .tabs-nav { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 16px; }
+    .tab-btn { padding: 10px 24px; background: transparent; border: 1px solid transparent; border-radius: 8px; color: #AFAFAF; font-size: 13px; font-weight: 500; letter-spacing: 1px; cursor: pointer; transition: all 0.3s; font-family: 'Space Grotesk'; text-transform: uppercase; }
+    .tab-btn:hover { color: #fff; border-color: rgba(255,255,255,0.1); }
+    .tab-btn.active { color: #D61B1B; border-color: rgba(214,27,27,0.3); background: rgba(214,27,27,0.08); }
+    .tab-panel { display: none; animation: tabFade 0.5s ease; }
+    .tab-panel.active { display: block; }
+    @keyframes tabFade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    .app-showcase { display: flex; flex-direction: column; align-items: center; }
+    .app-header-row { display: flex; align-items: center; gap: 32px; flex-wrap: wrap; justify-content: center; margin-bottom: 48px; }
+    .app-logo-wrap { width: 120px; height: 120px; border-radius: 24px; overflow: hidden; border: 2px solid rgba(214,27,27,0.3); box-shadow: 0 0 40px rgba(214,27,27,0.15); }
+    .app-logo-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    .app-title-block { text-align: left; }
+    .app-title-block h3 { font-family: 'Orbitron'; font-size: 28px; color: #fff; letter-spacing: 2px; }
+    .app-title-block .tagline { font-size: 14px; color: #D61B1B; letter-spacing: 3px; text-transform: uppercase; margin-top: 4px; }
+    .app-screens-row { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px; width: 100%; justify-content: center; flex-wrap: wrap; }
+    .app-screens-row::-webkit-scrollbar { height: 4px; }
+    .app-screens-row::-webkit-scrollbar-track { background: transparent; }
+    .app-screens-row::-webkit-scrollbar-thumb { background: rgba(214,27,27,0.3); border-radius: 2px; }
+    .app-screen { flex: 0 0 auto; width: 220px; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); transition: all 0.5s ease; }
+    .app-screen:hover { transform: translateY(-8px) scale(1.03); border-color: rgba(214,27,27,0.3); box-shadow: 0 20px 40px rgba(214,27,27,0.15); }
+    .app-screen img { width: 100%; height: auto; display: block; }
+
+    .game-showcase { display: flex; flex-direction: column; align-items: center; }
+    .game-header-row { display: flex; align-items: center; gap: 32px; flex-wrap: wrap; justify-content: center; margin-bottom: 48px; }
+    .game-title-block { text-align: center; }
+    .game-title-block h3 { font-family: 'Orbitron'; font-size: 32px; color: #fff; letter-spacing: 2px; }
+    .game-title-block .tagline { font-size: 14px; color: #D61B1B; letter-spacing: 3px; text-transform: uppercase; margin-top: 4px; }
+    .game-screens-row { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px; width: 100%; justify-content: center; flex-wrap: wrap; }
+    .game-screens-row::-webkit-scrollbar { height: 4px; }
+    .game-screens-row::-webkit-scrollbar-track { background: transparent; }
+    .game-screens-row::-webkit-scrollbar-thumb { background: rgba(214,27,27,0.3); border-radius: 2px; }
+    .game-screen { flex: 0 0 auto; width: 420px; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); transition: all 0.5s ease; }
+    .game-screen:hover { transform: translateY(-8px) scale(1.02); border-color: rgba(214,27,27,0.3); box-shadow: 0 20px 40px rgba(214,27,27,0.15); }
+    .game-screen img { width: 100%; height: auto; display: block; }
+
+    .about-tab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; max-width: 1200px; margin: 0 auto; }
+    .about-photo-stack { position: relative; display: flex; justify-content: center; }
+    .about-photo-main { width: 320px; height: 400px; border-radius: 16px; overflow: hidden; border: 2px solid rgba(214,27,27,0.2); box-shadow: 0 20px 60px rgba(0,0,0,0.5); position: relative; z-index: 2; }
+    .about-photo-main img { width: 100%; height: 100%; object-fit: cover; }
+    .about-photo-1 { position: absolute; width: 200px; height: 260px; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); top: -20px; left: -40px; z-index: 1; transform: rotate(-8deg); opacity: 0.6; }
+    .about-photo-1 img { width: 100%; height: 100%; object-fit: cover; }
+    .about-photo-2 { position: absolute; width: 180px; height: 240px; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); bottom: -10px; right: -30px; z-index: 1; transform: rotate(6deg); opacity: 0.5; }
+    .about-photo-2 img { width: 100%; height: 100%; object-fit: cover; }
+    .about-info h3 { font-family: 'Orbitron'; font-size: 32px; color: #fff; letter-spacing: 2px; margin-bottom: 8px; }
+    .about-info .location { font-size: 14px; color: #D61B1B; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 6px; }
+    .about-info p { font-size: 15px; color: #AFAFAF; line-height: 1.8; margin-bottom: 16px; }
+    .about-stats-row { display: flex; gap: 24px; flex-wrap: wrap; margin-top: 32px; }
+    .about-stat { padding: 16px 24px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; text-align: center; min-width: 100px; }
+    .about-stat .num { font-family: 'Orbitron'; font-size: 22px; color: #D61B1B; font-weight: 700; }
+    .about-stat .lbl { font-size: 11px; color: #AFAFAF; letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
+
     .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 32px; }
     .project-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; overflow: hidden; transition: all 0.5s ease; position: relative; }
     .project-card:hover { transform: translateY(-8px); border-color: rgba(214,27,27,0.3); box-shadow: 0 20px 40px rgba(214,27,27,0.1); }
     .project-thumb { height: 220px; background: linear-gradient(135deg, #1a0a0a, #0d0d0d); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-    .project-thumb svg { transition: transform 0.5s; }
-    .project-card:hover .project-thumb svg { transform: scale(1.1); }
+    .project-thumb img { width: 100%; height: 100%; object-fit: cover; }
     .project-thumb-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(5,5,5,0.8), transparent); }
     .project-badge { position: absolute; top: 16px; right: 16px; z-index: 10; padding: 6px 12px; background: rgba(214,27,27,0.15); border: 1px solid rgba(214,27,27,0.3); border-radius: 4px; font-size: 11px; color: #FF3B3B; letter-spacing: 1px; text-transform: uppercase; }
     .project-content { padding: 24px; }
@@ -135,7 +182,6 @@
     .project-btn-secondary { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color: #AFAFAF; }
     .project-btn-secondary:hover { border-color: rgba(255,255,255,0.2); }
 
-    /* Skills */
     .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
     .skills-orbit { position: relative; height: 400px; display: flex; align-items: center; justify-content: center; }
     .orbit-container { position: relative; width: 300px; height: 300px; }
@@ -146,41 +192,12 @@
     .skill-node { position: absolute; top: 50%; left: 50%; padding: 8px 16px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; font-size: 12px; color: #AFAFAF; white-space: nowrap; transition: all 0.3s; cursor: pointer; font-family: 'Space Grotesk'; letter-spacing: 1px; }
     .skill-node:hover { background: rgba(214,27,27,0.2); border-color: rgba(214,27,27,0.5); color: #fff; box-shadow: 0 0 20px rgba(214,27,27,0.3); transform: translate(-50%, -50%) scale(1.2); }
 
-    /* Achievements */
     .achievements-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
     .achieve-card { padding: 24px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; text-align: center; transition: all 0.3s; }
     .achieve-card:hover { border-color: rgba(214,27,27,0.2); background: rgba(255,255,255,0.05); }
     .achieve-value { font-size: 28px; font-weight: 700; color: #D61B1B; margin-bottom: 4px; font-family: 'Orbitron'; }
     .achieve-label { font-size: 11px; color: #AFAFAF; letter-spacing: 1px; }
 
-    /* Games Showcase */
-    .showcase-scroll { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px; }
-    .showcase-scroll::-webkit-scrollbar { height: 4px; }
-    .showcase-scroll::-webkit-scrollbar-track { background: transparent; }
-    .showcase-scroll::-webkit-scrollbar-thumb { background: rgba(214,27,27,0.3); border-radius: 2px; }
-    .showcase-card { flex: 0 0 280px; height: 380px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; overflow: hidden; transition: all 0.5s ease; cursor: pointer; }
-    .showcase-card:hover { transform: translateY(-8px) scale(1.02); border-color: rgba(214,27,27,0.3); }
-    .showcase-img { height: 280px; background: linear-gradient(135deg, #1a0a0a, #0d0d0d); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-    .showcase-img svg { transition: transform 0.5s; }
-    .showcase-card:hover .showcase-img svg { transform: scale(1.25) rotate(6deg); }
-    .showcase-img-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(5,5,5,0.6), transparent); opacity: 0; transition: opacity 0.5s; }
-    .showcase-card:hover .showcase-img-overlay { opacity: 1; }
-    .showcase-info { padding: 16px; display: flex; align-items: center; gap: 8px; }
-    .showcase-dot { width: 6px; height: 6px; background: #D61B1B; border-radius: 50%; }
-    .showcase-name { font-size: 13px; color: #AFAFAF; letter-spacing: 2px; text-transform: uppercase; }
-
-    /* About */
-    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-    .about-img { position: relative; aspect-ratio: 3/4; max-width: 450px; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); }
-    .about-img-bg { width: 100%; height: 100%; background: linear-gradient(135deg, #1a0a0a, #0a0a0a, #1a0505); display: flex; align-items: center; justify-content: center; }
-    .about-img-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(5,5,5,0.6), transparent); }
-    .about-values { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .about-value-card { padding: 16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; transition: all 0.3s; }
-    .about-value-card:hover { border-color: rgba(214,27,27,0.2); }
-    .about-value-title { font-size: 12px; color: #D61B1B; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; }
-    .about-value-desc { font-size: 13px; color: #AFAFAF; }
-
-    /* Contact */
     .contact-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 48px; }
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     .form-group { margin-bottom: 0; }
@@ -195,7 +212,6 @@
     .social-link { display: flex; align-items: center; gap: 8px; color: #AFAFAF; text-decoration: none; font-size: 13px; transition: color 0.3s; font-family: 'Space Grotesk'; }
     .social-link:hover { color: #D61B1B; }
 
-    /* Footer */
     .footer { position: relative; padding: 48px 64px; border-top: 1px solid rgba(255,255,255,0.06); z-index: 1; }
     .footer-inner { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px; }
     .footer-social { display: flex; gap: 20px; }
@@ -203,42 +219,43 @@
     .footer-social a:hover { color: #D61B1B; }
     .footer-copy { font-size: 12px; color: #666; }
 
-    /* Noise Overlay */
     .noise-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9998; opacity: 0.03; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); }
 
-    /* Keyframes */
     @keyframes heroFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
     @keyframes aboutFloat { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-10px) scale(1.05); } }
 
-    /* Responsive */
     @media (max-width: 1024px) {
       .hero-grid { grid-template-columns: 1fr; gap: 40px; }
       .hero-artwork { order: -1; }
       .skills-grid { grid-template-columns: 1fr; gap: 40px; }
-      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .about-tab-grid { grid-template-columns: 1fr; gap: 40px; }
+      .about-photo-stack { order: -1; }
       .section { padding: 80px 32px; }
       .hero { padding: 100px 32px 60px; }
       .footer { padding: 32px; }
       .nav-links, .nav-cta { display: none; }
       .mobile-toggle { display: block; }
       .navbar { padding: 16px 24px; }
+      .game-screen { width: 320px; }
+      .app-screen { width: 160px; }
     }
     @media (max-width: 768px) {
       .projects-grid { grid-template-columns: 1fr; }
       .achievements-grid { grid-template-columns: repeat(2, 1fr); }
       .form-grid { grid-template-columns: 1fr; }
-      .about-values { grid-template-columns: 1fr; }
       .footer-inner { flex-direction: column; text-align: center; }
       .section-title { font-size: 28px; }
+      .about-photo-main { width: 260px; height: 340px; }
+      .about-photo-1, .about-photo-2 { display: none; }
+      .game-screen { width: 280px; }
+      .app-screen { width: 140px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Noise Overlay -->
   <div class="noise-overlay"></div>
 
-  <!-- Loading Screen -->
   <div id="loading-screen">
     <svg class="load-logo" viewBox="0 0 100 100">
       <defs>
@@ -262,10 +279,8 @@
     <p class="load-percent" id="load-percent">0%</p>
   </div>
 
-  <!-- Particle Canvas -->
   <canvas id="ember-canvas"></canvas>
 
-  <!-- Navigation -->
   <nav class="navbar" id="navbar">
     <div style="display:flex;align-items:center;gap:10px;">
       <a href="#hero" class="nav-logo">
@@ -288,7 +303,7 @@
     <div class="nav-links">
       <a href="#hero">Home</a>
       <a href="#projects">Projects</a>
-      <a href="#games">Games</a>
+      <a href="#showcase">Showcase</a>
       <a href="#skills">Skills</a>
       <a href="#about">About</a>
       <a href="#contact">Contact</a>
@@ -300,14 +315,13 @@
     <div class="mobile-menu" id="mobile-menu">
       <a href="#hero" onclick="toggleMobileMenu()">Home</a>
       <a href="#projects" onclick="toggleMobileMenu()">Projects</a>
-      <a href="#games" onclick="toggleMobileMenu()">Games</a>
+      <a href="#showcase" onclick="toggleMobileMenu()">Showcase</a>
       <a href="#skills" onclick="toggleMobileMenu()">Skills</a>
       <a href="#about" onclick="toggleMobileMenu()">About</a>
       <a href="#contact" onclick="toggleMobileMenu()">Contact</a>
     </div>
   </nav>
 
-  <!-- Hero Section -->
   <section class="hero" id="hero">
     <div class="hero-bg"></div>
     <div class="hero-fade"></div>
@@ -325,13 +339,13 @@
           <span class="sep">|</span>
           <span>AI Enthusiast</span>
         </div>
-        <p class="hero-desc">I build immersive games and powerful apps that combine performance, design and innovation.</p>
+        <p class="hero-desc">I build immersive games and powerful apps that combine performance, design and innovation. From the battlefields of Haryana, India — forging digital experiences that leave a mark.</p>
         <div class="hero-btns">
-          <a href="#projects" class="btn-primary">
+          <a href="#showcase" class="btn-primary">
             Explore My Work
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
           </a>
-          <button class="btn-outline">
+          <button class="btn-outline" onclick="alert('Resume download coming soon!')">
             Download Resume
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
           </button>
@@ -345,21 +359,7 @@
         <div class="hero-artwork">
           <div class="hero-artwork-inner">
             <div class="hero-artwork-bg">
-              <svg width="200" height="200" viewBox="0 0 80 80" style="animation: heroFloat 6s ease-in-out infinite;">
-                <defs>
-                  <linearGradient id="heroGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#D61B1B"/>
-                    <stop offset="100%" stop-color="#FF3B3B"/>
-                  </linearGradient>
-                  <filter id="heroGlow">
-                    <feGaussianBlur stdDeviation="6" result="blur"/>
-                    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-                  </filter>
-                </defs>
-                <circle cx="40" cy="40" r="36" fill="none" stroke="url(#heroGrad)" stroke-width="1.5" opacity="0.5"/>
-                <circle cx="40" cy="40" r="28" fill="none" stroke="url(#heroGrad)" stroke-width="0.5" opacity="0.3"/>
-                <text x="40" y="52" text-anchor="middle" fill="url(#heroGrad)" font-size="32" font-weight="700" filter="url(#heroGlow)" font-family="Orbitron">RK</text>
-              </svg>
+              <img src="1000205886.png" alt="Rohan Krythos" style="width:100%;height:100%;object-fit:cover;opacity:0.9;">
             </div>
             <div class="hero-artwork-overlay"></div>
             <div class="hero-badge">
@@ -373,7 +373,6 @@
     </div>
   </section>
 
-  <!-- Featured Projects -->
   <section class="section" id="projects">
     <div class="section-inner">
       <div class="reveal" style="text-align:center;margin-bottom:64px;">
@@ -381,65 +380,43 @@
         <h2 class="section-title">Featured Projects</h2>
       </div>
       <div class="projects-grid">
-        <!-- Project 1: Habit Warrior -->
         <div class="reveal project-card">
           <div class="project-thumb">
-            <svg width="80" height="80" viewBox="0 0 80 80">
-              <defs>
-                <linearGradient id="p1" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#D61B1B"/>
-                  <stop offset="100%" stop-color="#FF3B3B"/>
-                </linearGradient>
-              </defs>
-              <path d="M40 10 L55 25 L55 55 L40 70 L25 55 L25 25 Z" fill="none" stroke="url(#p1)" stroke-width="2" opacity="0.6"/>
-              <path d="M40 20 L48 28 L48 52 L40 60 L32 52 L32 28 Z" fill="url(#p1)" opacity="0.2"/>
-              <circle cx="40" cy="40" r="8" fill="url(#p1)" opacity="0.8"/>
-            </svg>
+            <img src="1000202568.png" alt="Habit of a Warrior">
             <div class="project-thumb-overlay"></div>
           </div>
           <div class="project-content">
-            <h3 class="project-title">Habit Warrior</h3>
+            <h3 class="project-title">Habit of a Warrior</h3>
             <p class="project-subtitle">Productivity App</p>
-            <p class="project-desc">Build better habits, stay consistent and become the strongest version of yourself.</p>
+            <p class="project-desc">A warrior-themed habit tracker built for Android. Build habits, break weaknesses, and level up your discipline with streaks, XP, and rankings.</p>
             <div class="project-actions">
-              <button class="project-btn project-btn-secondary">
+              <button class="project-btn project-btn-secondary" onclick="alert('Coming to Google Play soon!')">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                 Google Play
               </button>
-              <button class="project-btn project-btn-primary">
+              <button class="project-btn project-btn-primary" onclick="document.getElementById('showcase').scrollIntoView({behavior:'smooth'})">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
-                Case Study
+                View Screenshots
               </button>
             </div>
           </div>
         </div>
 
-        <!-- Project 2: Sword & Axe -->
         <div class="reveal project-card">
           <div class="project-thumb">
-            <svg width="80" height="80" viewBox="0 0 80 80">
-              <defs>
-                <linearGradient id="p2" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#D61B1B"/>
-                  <stop offset="100%" stop-color="#FF3B3B"/>
-                </linearGradient>
-              </defs>
-              <path d="M20 60 L40 20 L60 60" fill="none" stroke="url(#p2)" stroke-width="2" opacity="0.6"/>
-              <path d="M30 60 L40 35 L50 60" fill="url(#p2)" opacity="0.2"/>
-              <circle cx="40" cy="20" r="4" fill="url(#p2)"/>
-            </svg>
+            <img src="1000149229.png" alt="Sword & Axe: 22 Thrones">
             <div class="project-thumb-overlay"></div>
           </div>
           <div class="project-content">
-            <h3 class="project-title">Sword & Axe</h3>
-            <p class="project-subtitle">22 Thrones</p>
-            <p class="project-desc">A cinematic 3D action game of war, strategy and glory.</p>
+            <h3 class="project-title">Sword & Axe: 22 Thrones</h3>
+            <p class="project-subtitle">3D Action Game</p>
+            <p class="project-desc">A cinematic 3D action game of war, strategy and glory. Battle through 22 kingdoms, forge alliances, and claim your throne in an epic warrior saga.</p>
             <div class="project-actions">
-              <button class="project-btn project-btn-primary">
+              <button class="project-btn project-btn-primary" onclick="document.getElementById('showcase').scrollIntoView({behavior:'smooth'})">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                Watch Trailer
+                Watch Gameplay
               </button>
-              <button class="project-btn project-btn-secondary">
+              <button class="project-btn project-btn-secondary" onclick="alert('Coming soon to Steam & Play Store!')">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
                 Learn More
               </button>
@@ -447,29 +424,18 @@
           </div>
         </div>
 
-        <!-- Project 3: Warrior Game -->
         <div class="reveal project-card">
           <div class="project-thumb">
-            <div class="project-badge">Coming Soon</div>
-            <svg width="80" height="80" viewBox="0 0 80 80">
-              <defs>
-                <linearGradient id="p3" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#D61B1B"/>
-                  <stop offset="100%" stop-color="#FF3B3B"/>
-                </linearGradient>
-              </defs>
-              <rect x="20" y="20" width="40" height="40" rx="4" fill="none" stroke="url(#p3)" stroke-width="2" opacity="0.4"/>
-              <rect x="28" y="28" width="24" height="24" rx="2" fill="url(#p3)" opacity="0.15"/>
-              <path d="M35 40 L38 43 L45 36" fill="none" stroke="url(#p3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+            <div class="project-badge">In Development</div>
+            <img src="1000167475.png" alt="Warrior Game">
             <div class="project-thumb-overlay"></div>
           </div>
           <div class="project-content">
-            <h3 class="project-title">Warrior Game</h3>
+            <h3 class="project-title">Warrior RPG</h3>
             <p class="project-subtitle">Coming Soon</p>
-            <p class="project-desc">An epic RPG adventure set in a dark fantasy world.</p>
+            <p class="project-desc">An epic RPG adventure set in a dark fantasy world. Currently in active development with 3 more games and 1 new app in the pipeline.</p>
             <div class="project-actions">
-              <button class="project-btn project-btn-secondary">
+              <button class="project-btn project-btn-secondary" onclick="alert('Wishlist coming soon!')">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
                 Wishlist
               </button>
@@ -480,7 +446,135 @@
     </div>
   </section>
 
-  <!-- Skills Section -->
+  <section class="section" id="showcase">
+    <div class="section-inner">
+      <div class="reveal" style="text-align:center;margin-bottom:48px;">
+        <p class="section-subtitle">Gallery</p>
+        <h2 class="section-title">Project Showcase</h2>
+      </div>
+
+      <div class="tabs-container">
+        <div class="tabs-nav">
+          <button class="tab-btn active" data-tab="app">Habit of a Warrior</button>
+          <button class="tab-btn" data-tab="game">Sword & Axe: 22 Thrones</button>
+          <button class="tab-btn" data-tab="dev">About the Developer</button>
+        </div>
+
+        <div class="tab-panel active" id="tab-app">
+          <div class="app-showcase">
+            <div class="app-header-row">
+              <div class="app-logo-wrap">
+                <img src="1000202568.png" alt="Habit of a Warrior Logo">
+              </div>
+              <div class="app-title-block">
+                <h3>Habit of a Warrior</h3>
+                <div class="tagline">Build Habits. Break Weaknesses.</div>
+              </div>
+            </div>
+            <div class="app-screens-row">
+              <div class="app-screen reveal">
+                <img src="1000192575.png" alt="Home Screen">
+              </div>
+              <div class="app-screen reveal">
+                <img src="1000192577.png" alt="Leaderboard">
+              </div>
+              <div class="app-screen reveal">
+                <img src="1000203152.png" alt="Travel Board">
+              </div>
+              <div class="app-screen reveal">
+                <img src="1000205440.jpg" alt="Battle Alarm">
+              </div>
+              <div class="app-screen reveal">
+                <img src="1000208083.jpg" alt="My Habits">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="tab-game">
+          <div class="game-showcase">
+            <div class="game-header-row">
+              <div class="game-title-block">
+                <h3>Sword & Axe: 22 Thrones</h3>
+                <div class="tagline">War. Strategy. Glory.</div>
+              </div>
+            </div>
+            <div class="game-screens-row">
+              <div class="game-screen reveal">
+                <img src="1000149229.png" alt="Combat Controls">
+              </div>
+              <div class="game-screen reveal">
+                <img src="1000149310.png" alt="World Map">
+              </div>
+              <div class="game-screen reveal">
+                <img src="1000167475.png" alt="Hero Profile">
+              </div>
+              <div class="game-screen reveal">
+                <img src="1000167477.png" alt="Desert Battle">
+              </div>
+              <div class="game-screen reveal">
+                <img src="1000167557.png" alt="Boss Fight">
+              </div>
+              <div class="game-screen reveal">
+                <img src="1000186290.png" alt="Fire Boss">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="tab-dev">
+          <div class="about-tab-grid">
+            <div class="about-photo-stack">
+              <div class="about-photo-1">
+                <img src="1000177618.jpg" alt="Rohan Krythos">
+              </div>
+              <div class="about-photo-main">
+                <img src="1000205874.png" alt="Rohan Krythos">
+              </div>
+              <div class="about-photo-2">
+                <img src="1000186588.png" alt="Rohan Krythos">
+              </div>
+            </div>
+            <div class="about-info">
+              <h3>Rohan Krythos</h3>
+              <div class="location">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                Haryana, India
+              </div>
+              <p>
+                I am <strong style="color:#fff;">Rohan Krythos</strong> — a passionate developer who believes that every line of code is a step toward building something extraordinary. My journey began with a simple curiosity about how games work, and it evolved into a deep obsession with creating immersive digital experiences.
+              </p>
+              <p>
+                From Android apps that solve real problems to Unity games that transport players to new worlds, I blend technical expertise with creative vision to deliver premium experiences. Based in <strong style="color:#fff;">Haryana, India</strong>, I am constantly pushing boundaries — currently developing <strong style="color:#D61B1B;">3 new games</strong> and <strong style="color:#D61B1B;">1 new app</strong> alongside my existing projects.
+              </p>
+              <p>
+                My official projects include the warrior-themed productivity app <strong style="color:#fff;">"Habit of a Warrior"</strong> and the epic 3D action game <strong style="color:#fff;">"Sword & Axe: 22 Thrones"</strong>. I don't just build software — I forge digital weapons for the modern age.
+              </p>
+              <div class="about-stats-row">
+                <div class="about-stat">
+                  <div class="num">15+</div>
+                  <div class="lbl">Projects</div>
+                </div>
+                <div class="about-stat">
+                  <div class="num">8+</div>
+                  <div class="lbl">Apps</div>
+                </div>
+                <div class="about-stat">
+                  <div class="num">5+</div>
+                  <div class="lbl">Games</div>
+                </div>
+                <div class="about-stat">
+                  <div class="num">5000+</div>
+                  <div class="lbl">Hours Coded</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="section" id="skills">
     <div class="section-inner" style="max-width:1200px;">
       <div class="reveal" style="text-align:center;margin-bottom:64px;">
@@ -488,7 +582,6 @@
         <h2 class="section-title">My Skills</h2>
       </div>
       <div class="skills-grid">
-        <!-- Skills Orbit -->
         <div class="reveal-scale" id="skills-orbit">
           <div class="skills-orbit">
             <div class="orbit-container">
@@ -517,7 +610,6 @@
           </div>
         </div>
 
-        <!-- Achievements -->
         <div class="reveal-right" id="achievements">
           <p class="section-subtitle" style="text-align:left;">Track Record</p>
           <h3 style="font-size:28px;font-weight:700;margin:0 0 32px;color:#fff;font-family:'Orbitron',sans-serif;">Achievements</h3>
@@ -527,122 +619,13 @@
             <div class="achieve-card"><div class="achieve-value">5+</div><div class="achieve-label">GAMES</div></div>
             <div class="achieve-card"><div class="achieve-value">5000+</div><div class="achieve-label">HOURS CODED</div></div>
             <div class="achieve-card"><div class="achieve-value">50K+</div><div class="achieve-label">USERS</div></div>
-            <div class="achieve-card"><div class="achieve-value">∞</div><div class="achieve-label">PASSION</div></div>
+            <div class="achieve-card"><div class="achieve-value">&#8734;</div><div class="achieve-label">PASSION</div></div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Gameplay Showcase -->
-  <section class="section" id="games">
-    <div class="section-inner">
-      <div class="reveal" style="text-align:center;margin-bottom:64px;">
-        <p class="section-subtitle">Showcase</p>
-        <h2 class="section-title">Gameplay Showcase</h2>
-      </div>
-      <div class="showcase-scroll">
-        <div class="reveal showcase-card">
-          <div class="showcase-img">
-            <svg width="60" height="60" viewBox="0 0 60 60" fill="none" stroke="#D61B1B" stroke-width="2">
-              <path d="M15 45 L30 15 L45 45" opacity="0.6"/><circle cx="30" cy="15" r="4"/>
-            </svg>
-            <div class="showcase-img-overlay"></div>
-          </div>
-          <div class="showcase-info"><div class="showcase-dot"></div><span class="showcase-name">Combat</span></div>
-        </div>
-        <div class="reveal showcase-card">
-          <div class="showcase-img">
-            <svg width="60" height="60" viewBox="0 0 60 60" fill="none" stroke="#D61B1B" stroke-width="1.5">
-              <path d="M30 10 L35 25 L50 25 L38 35 L42 50 L30 40 L18 50 L22 35 L10 25 L25 25 Z" opacity="0.5"/>
-            </svg>
-            <div class="showcase-img-overlay"></div>
-          </div>
-          <div class="showcase-info"><div class="showcase-dot"></div><span class="showcase-name">Magic</span></div>
-        </div>
-        <div class="reveal showcase-card">
-          <div class="showcase-img">
-            <svg width="60" height="60" viewBox="0 0 60 60" fill="none" stroke="#D61B1B" stroke-width="2">
-              <rect x="15" y="15" width="30" height="30" rx="4" opacity="0.5"/>
-              <path d="M20 30 L25 25 L30 30 L35 20" stroke-linecap="round"/>
-            </svg>
-            <div class="showcase-img-overlay"></div>
-          </div>
-          <div class="showcase-info"><div class="showcase-dot"></div><span class="showcase-name">Boss Fight</span></div>
-        </div>
-        <div class="reveal showcase-card">
-          <div class="showcase-img">
-            <svg width="60" height="60" viewBox="0 0 60 60" fill="none" stroke="#D61B1B" stroke-width="2">
-              <path d="M30 10 L30 40 M20 20 L30 10 L40 20" stroke-linecap="round" opacity="0.5"/>
-              <path d="M15 45 Q30 35 45 45" opacity="0.3" stroke-width="1.5"/>
-            </svg>
-            <div class="showcase-img-overlay"></div>
-          </div>
-          <div class="showcase-info"><div class="showcase-dot"></div><span class="showcase-name">Archery</span></div>
-        </div>
-        <div class="reveal showcase-card">
-          <div class="showcase-img">
-            <svg width="60" height="60" viewBox="0 0 60 60" fill="none" stroke="#D61B1B" stroke-width="2">
-              <circle cx="30" cy="30" r="15" opacity="0.4"/>
-              <path d="M30 15 L30 20 M30 40 L30 45 M15 30 L20 30 M40 30 L45 30" opacity="0.5"/>
-            </svg>
-            <div class="showcase-img-overlay"></div>
-          </div>
-          <div class="showcase-info"><div class="showcase-dot"></div><span class="showcase-name">Survival</span></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- About Section -->
-  <section class="section" id="about">
-    <div class="section-inner" style="max-width:1200px;">
-      <div class="about-grid">
-        <div class="reveal-left" id="about-left">
-          <div class="about-img">
-            <div class="about-img-bg">
-              <svg width="150" height="150" viewBox="0 0 80 80" style="animation: aboutFloat 4s ease-in-out infinite;">
-                <defs>
-                  <linearGradient id="abGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#D61B1B"/>
-                    <stop offset="100%" stop-color="#FF3B3B"/>
-                  </linearGradient>
-                  <filter id="abGlow">
-                    <feGaussianBlur stdDeviation="4" result="blur"/>
-                    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-                  </filter>
-                </defs>
-                <circle cx="40" cy="40" r="36" fill="none" stroke="url(#abGrad)" stroke-width="1.5" opacity="0.4"/>
-                <text x="40" y="52" text-anchor="middle" fill="url(#abGrad)" font-size="28" font-weight="700" filter="url(#abGlow)" font-family="Orbitron">RK</text>
-              </svg>
-            </div>
-            <div class="about-img-overlay"></div>
-          </div>
-        </div>
-        <div class="reveal-right" id="about-right">
-          <p class="section-subtitle" style="text-align:left;">About Me</p>
-          <h2 style="font-size:clamp(28px,4vw,40px);font-weight:700;margin:0 0 24px;color:#fff;line-height:1.2;font-family:'Orbitron',sans-serif;">
-            The Story Behind<br/>
-            <span style="background:linear-gradient(135deg,#D61B1B,#FF3B3B);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">The Code</span>
-          </h2>
-          <p style="font-size:15px;color:#AFAFAF;line-height:1.8;margin-bottom:20px;">
-            I am Rohan Krythos — a passionate developer who believes that every line of code is a step toward building something extraordinary. My journey began with a simple curiosity about how games work, and it evolved into a deep obsession with creating immersive digital experiences.
-          </p>
-          <p style="font-size:15px;color:#AFAFAF;line-height:1.8;margin-bottom:32px;">
-            From Android apps that solve real problems to Unity games that transport players to new worlds, I blend technical expertise with creative vision to deliver premium experiences.
-          </p>
-          <div class="about-values">
-            <div class="about-value-card"><div class="about-value-title">Mission</div><div class="about-value-desc">Build experiences that inspire</div></div>
-            <div class="about-value-card"><div class="about-value-title">Vision</div><div class="about-value-desc">Redefine digital interaction</div></div>
-            <div class="about-value-card"><div class="about-value-title">Values</div><div class="about-value-desc">Quality, Innovation, Passion</div></div>
-            <div class="about-value-card"><div class="about-value-title">Focus</div><div class="about-value-desc">Games, Apps, AI</div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Contact Section -->
   <section class="section" id="contact">
     <div class="section-inner" style="max-width:800px;">
       <div class="reveal" style="text-align:center;margin-bottom:64px;">
@@ -699,7 +682,6 @@
     </div>
   </section>
 
-  <!-- Footer -->
   <footer class="footer">
     <div class="footer-inner">
       <div style="display:flex;align-items:center;gap:12px;">
@@ -729,8 +711,6 @@
   </footer>
 
   <script>
-
-    // Loading Screen
     (function() {
       let progress = 0;
       const bar = document.getElementById('load-bar');
@@ -752,7 +732,6 @@
       }, 150);
     })();
 
-    // Particle System
     (function() {
       const canvas = document.getElementById('ember-canvas');
       const ctx = canvas.getContext('2d');
@@ -805,7 +784,6 @@
       window.addEventListener('resize', function() { resize(); createParticles(); });
     })();
 
-    // Navbar Scroll Effect
     (function() {
       const navbar = document.getElementById('navbar');
       window.addEventListener('scroll', function() {
@@ -814,12 +792,10 @@
       });
     })();
 
-    // Mobile Menu Toggle
     function toggleMobileMenu() {
       document.getElementById('mobile-menu').classList.toggle('active');
     }
 
-    // Scroll Reveal Animation
     (function() {
       const observer = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
@@ -834,13 +810,22 @@
       });
     })();
 
-    // Hero elements immediate reveal after loading
     setTimeout(function() {
       document.getElementById('hero-left').classList.add('visible');
       setTimeout(function() {
         document.getElementById('hero-right').classList.add('visible');
       }, 200);
     }, 2500);
+
+    // Tab Switching
+    document.querySelectorAll('.tab-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+        document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+      });
+    });
   </script>
 </body>
 </html>
