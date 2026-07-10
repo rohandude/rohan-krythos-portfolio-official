@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rohan Krythos | Android & Game Developer</title>
+  <meta name="description" content="Code. Create. Conquer. I build cinematic games and high-performance Android applications.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --rk-bg: #050505;
+      --rk-bg2: #111111;
+      --rk-accent: #D61B1B;
+      --rk-accent2: #FF3B3B;
+      --rk-text: #FFFFFF;
+      --rk-text2: #AFAFAF;
+      --rk-border: rgba(255,255,255,0.08);
+      --rk-glass: rgba(255,255,255,0.05);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--rk-bg);
+      color: var(--rk-text);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    ::selection { background: rgba(214, 27, 27, 0.3); color: white; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--rk-bg); }
+    ::-webkit-scrollbar-thumb { background: var(--rk-accent); border-radius: 3px; }
+
+    /* Loading Screen */
+    #loading-screen {
+      position: fixed; inset: 0; z-index: 9999;
+      background: #050505;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      transition: opacity 1s ease;
+    }
+    #loading-screen.hidden { opacity: 0; pointer-events: none; }
+    .load-logo { width: 100px; height: 100px; margin-bottom: 24px; animation: loadPulse 2s ease-in-out infinite; }
+    @keyframes loadPulse { 0%, 100% { transform: scale(1); opacity: 0.7; } 50% { transform: scale(1.1); opacity: 1; } }
+    .load-text { font-size: 14px; color: #AFAFAF; letter-spacing: 6px; text-transform: uppercase; font-family: 'Space Grotesk'; animation: textPulse 1.5s ease-in-out infinite; }
+    @keyframes textPulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+    .load-bar-container { margin-top: 20px; width: 200px; height: 2px; background: rgba(255,255,255,0.08); border-radius: 1px; overflow: hidden; }
+    .load-bar { height: 100%; background: linear-gradient(90deg, #D61B1B, #FF3B3B); border-radius: 1px; transition: width 0.3s ease; }
+    .load-percent { margin-top: 12px; font-size: 12px; color: #666; font-family: 'Orbitron'; letter-spacing: 2px; }
+
+    /* Particles Canvas */
+    #ember-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; opacity: 0.6; }
+
+    /* Navigation */
+    .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; background: transparent; transition: all 0.4s ease; }
+    .navbar.scrolled { background: rgba(5,5,5,0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo svg { transition: transform 0.3s; }
+    .nav-logo:hover svg { transform: scale(1.1); }
+    .nav-links { display: flex; gap: 32px; align-items: center; }
+    .nav-links a { font-size: 13px; color: #AFAFAF; text-decoration: none; letter-spacing: 1px; transition: color 0.3s; position: relative; font-family: 'Space Grotesk'; }
+    .nav-links a:hover { color: #D61B1B; }
+    .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px; background: linear-gradient(90deg, #D61B1B, #FF3B3B); transition: width 0.3s ease; }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-cta { padding: 10px 24px; border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; font-size: 12px; font-weight: 500; color: #fff; text-decoration: none; letter-spacing: 1px; transition: all 0.3s; background: rgba(255,255,255,0.03); font-family: 'Space Grotesk'; }
+    .nav-cta:hover { border-color: rgba(214,27,27,0.5); box-shadow: 0 0 20px rgba(214,27,27,0.2); }
+    .mobile-toggle { display: none; background: none; border: none; color: #fff; cursor: pointer; }
+    .mobile-menu { display: none; position: absolute; top: 100%; left: 0; right: 0; background: rgba(5,5,5,0.95); backdrop-filter: blur(20px); padding: 20px 32px; border-top: 1px solid rgba(255,255,255,0.05); }
+    .mobile-menu.active { display: block; }
+    .mobile-menu a { display: block; padding: 12px 0; color: #AFAFAF; text-decoration: none; font-size: 14px; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .mobile-menu a:last-child { border-bottom: none; }
+
+    /* Section Styles */
+    .section { position: relative; padding: 120px 64px; z-index: 1; }
+    .section-inner { max-width: 1400px; margin: 0 auto; }
+    .section-subtitle { font-size: 12px; color: #D61B1B; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 12px; font-family: 'Space Grotesk'; font-weight: 500; }
+    .section-title { font-family: 'Orbitron'; font-size: clamp(28px, 4vw, 48px); font-weight: 700; color: #fff; letter-spacing: 2px; text-transform: uppercase; }
+
+    /* Hero */
+    .hero { position: relative; min-height: 100vh; display: flex; align-items: center; padding: 120px 64px 80px; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; z-index: -1; background: radial-gradient(ellipse at 70% 50%, rgba(214,27,27,0.08) 0%, transparent 60%), radial-gradient(ellipse at 30% 80%, rgba(255,59,59,0.05) 0%, transparent 50%), linear-gradient(180deg, #050505 0%, #0a0a0a 50%, #050505 100%); }
+    .hero-fade { position: absolute; bottom: 0; left: 0; right: 0; height: 300px; background: linear-gradient(to top, #050505, transparent); }
+    .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; max-width: 1400px; margin: 0 auto; width: 100%; }
+    .hero-label { font-size: 12px; color: #D61B1B; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 16px; font-weight: 500; font-family: 'Space Grotesk'; }
+    .hero-name { font-family: 'Orbitron'; font-size: clamp(48px, 8vw, 96px); font-weight: 700; line-height: 0.95; letter-spacing: -2px; }
+    .hero-name span { display: block; }
+    .hero-name .red { background: linear-gradient(135deg, #D61B1B, #FF3B3B); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero-tags { margin-top: 20px; display: flex; gap: 16px; flex-wrap: wrap; }
+    .hero-tags span { font-size: 13px; color: #AFAFAF; letter-spacing: 2px; text-transform: uppercase; }
+    .hero-tags .sep { color: #333; }
+    .hero-desc { font-size: 16px; color: #AFAFAF; line-height: 1.7; margin-top: 24px; max-width: 480px; }
+    .hero-btns { margin-top: 32px; display: flex; gap: 16px; flex-wrap: wrap; }
+    .btn-primary { padding: 14px 32px; background: linear-gradient(135deg, #D61B1B, #FF3B3B); color: #fff; text-decoration: none; border-radius: 8px; font-size: 13px; font-weight: 600; letter-spacing: 1px; transition: all 0.3s; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-family: 'Space Grotesk'; text-transform: uppercase; box-shadow: 0 4px 20px rgba(214,27,27,0.3); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(214,27,27,0.4); }
+    .btn-outline { padding: 14px 32px; border: 1px solid rgba(255,255,255,0.15); color: #fff; text-decoration: none; border-radius: 8px; font-size: 13px; font-weight: 500; letter-spacing: 1px; transition: all 0.3s; background: rgba(255,255,255,0.03); display: inline-flex; align-items: center; gap: 8px; font-family: 'Space Grotesk'; text-transform: uppercase; cursor: pointer; }
+    .btn-outline:hover { border-color: #D61B1B; box-shadow: 0 0 20px rgba(214,27,27,0.2); }
+    .hero-scroll { margin-top: 48px; display: flex; align-items: center; gap: 8px; color: #666; font-size: 12px; letter-spacing: 2px; animation: scrollBounce 2s ease-in-out infinite; }
+    @keyframes scrollBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+    .hero-artwork { position: relative; display: flex; justify-content: center; align-items: center; }
+    .hero-artwork-inner { position: relative; width: 100%; max-width: 500px; aspect-ratio: 3/4; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); }
+    .hero-artwork-bg { width: 100%; height: 100%; background: linear-gradient(135deg, #1a0a0a, #0a0a0a, #1a0505); display: flex; align-items: center; justify-content: center; }
+    .hero-artwork-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(5,5,5,0.9) 100%); z-index: 1; }
+    .hero-badge { position: absolute; top: 20px; right: 20px; z-index: 2; width: 40px; height: 40px; border: 1px solid rgba(214,27,27,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .hero-ring-1 { position: absolute; top: -20px; right: -20px; width: 100px; height: 100px; border: 1px solid rgba(214,27,27,0.15); border-radius: 50%; }
+    .hero-ring-2 { position: absolute; bottom: -30px; left: -30px; width: 150px; height: 150px; border: 1px solid rgba(214,27,27,0.1); border-radius: 50%; }
+
+    /* Animations */
+    .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-left { opacity: 0; transform: translateX(-40px); transition: all 0.8s ease; }
+    .reveal-left.visible { opacity: 1; transform: translateX(0); }
+    .reveal-right { opacity: 0; transform: translateX(40px); transition: all 0.8s ease; }
+    .reveal-right.visible { opacity: 1; transform: translateX(0); }
+    .reveal-scale { opacity: 0; transform: scale(0.8); transition: all 0.8s ease; }
+    .reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+    /* Project Cards */
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 32px; }
+    .project-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; overflow: hidden; transition: all 0.5s ease; position: relative; }
+    .project-card:hover { transform: translateY(-8px); border-color: rgba(214,27,27,0.3); box-shadow: 0 20px 40px rgba(214,27,27,0.1); }
+    .project-thumb { height: 220px; background: linear-gradient(135deg, #1a0a0a, #0d0d0d); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+    .project-thumb svg { transition: transform 0.5s; }
+    .project-card:hover .project-thumb svg { transform: scale(1.1); }
+    .project-thumb-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(5,5,5,0.8), transparent); }
+    .project-badge { position: absolute; top: 16px; right: 16px; z-index: 10; padding: 6px 12px; background: rgba(214,27,27,0.15); border: 1px solid rgba(214,27,27,0.3); border-radius: 4px; font-size: 11px; color: #FF3B3B; letter-spacing: 1px; text-transform: uppercase; }
+    .project-content { padding: 24px; }
+    .project-title { font-size: 20px; font-weight: 600; margin: 0 0 8px; color: #fff; font-family: 'Orbitron'; }
+    .project-subtitle { font-size: 13px; color: #D61B1B; letter-spacing: 2px; text-transform: uppercase; margin: 0 0 12px; }
+    .project-desc { font-size: 14px; color: #AFAFAF; line-height: 1.6; margin: 0 0 20px; }
+    .project-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+    .project-btn { padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; transition: all 0.3s; cursor: pointer; border: none; font-family: 'Space Grotesk'; letter-spacing: 0.5px; }
+    .project-btn-primary { background: rgba(214,27,27,0.1); border: 1px solid rgba(214,27,27,0.2); color: #FF3B3B; }
+    .project-btn-primary:hover { background: rgba(214,27,27,0.2); }
+    .project-btn-secondary { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color: #AFAFAF; }
+    .project-btn-secondary:hover { border-color: rgba(255,255,255,0.2); }
+
+    /* Skills */
+    .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+    .skills-orbit { position: relative; height: 400px; display: flex; align-items: center; justify-content: center; }
+    .orbit-container { position: relative; width: 300px; height: 300px; }
+    .orbit-ring { position: absolute; inset: 0; border: 1px solid rgba(255,255,255,0.05); border-radius: 50%; }
+    .orbit-ring-inner { position: absolute; inset: 40px; border: 1px solid rgba(255,255,255,0.03); border-radius: 50%; }
+    .orbit-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80px; height: 80px; border: 2px solid rgba(214,27,27,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(5,5,5,0.8); z-index: 10; animation: orbitSpin 30s linear infinite; }
+    @keyframes orbitSpin { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
+    .skill-node { position: absolute; top: 50%; left: 50%; padding: 8px 16px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; font-size: 12px; color: #AFAFAF; white-space: nowrap; transition: all 0.3s; cursor: pointer; font-family: 'Space Grotesk'; letter-spacing: 1px; }
+    .skill-node:hover { background: rgba(214,27,27,0.2); border-color: rgba(214,27,27,0.5); color: #fff; box-shadow: 0 0 20px rgba(214,27,27,0.3); transform: translate(-50%, -50%) scale(1.2); }
+
+    /* Achievements */
+    .achievements-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .achieve-card { padding: 24px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; text-align: center; transition: all 0.3s; }
+    .achieve-card:hover { border-color: rgba(214,27,27,0.2); background: rgba(255,255,255,0.05); }
+    .achieve-value { font-size: 28px; font-weight: 700; color: #D61B1B; margin-bottom: 4px; font-family: 'Orbitron'; }
+    .achieve-label { font-size: 11px; color: #AFAFAF; letter-spacing: 1px; }
+
+    /* Games Showcase */
+    .showcase-scroll { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px; }
+    .showcase-scroll::-webkit-scrollbar { height: 4px; }
+    .showcase-scroll::-webkit-scrollbar-track { background: transparent; }
+    .showcase-scroll::-webkit-scrollbar-thumb { background: rgba(214,27,27,0.3); border-radius: 2px; }
+    .showcase-card { flex: 0 0 280px; height: 380px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; overflow: hidden; transition: all 0.5s ease; cursor: pointer; }
+    .showcase-card:hover { transform: translateY(-8px) scale(1.02); border-color: rgba(214,27,27,0.3); }
+    .showcase-img { height: 280px; background: linear-gradient(135deg, #1a0a0a, #0d0d0d); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+    .showcase-img svg { transition: transform 0.5s; }
+    .showcase-card:hover .showcase-img svg { transform: scale(1.25) rotate(6deg); }
+    .showcase-img-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(5,5,5,0.6), transparent); opacity: 0; transition: opacity 0.5s; }
+    .showcase-card:hover .showcase-img-overlay { opacity: 1; }
+    .showcase-info { padding: 16px; display: flex; align-items: center; gap: 8px; }
+    .showcase-dot { width: 6px; height: 6px; background: #D61B1B; border-radius: 50%; }
+    .showcase-name { font-size: 13px; color: #AFAFAF; letter-spacing: 2px; text-transform: uppercase; }
+
+    /* About */
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .about-img { position: relative; aspect-ratio: 3/4; max-width: 450px; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); }
+    .about-img-bg { width: 100%; height: 100%; background: linear-gradient(135deg, #1a0a0a, #0a0a0a, #1a0505); display: flex; align-items: center; justify-content: center; }
+    .about-img-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(5,5,5,0.6), transparent); }
+    .about-values { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .about-value-card { padding: 16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; transition: all 0.3s; }
+    .about-value-card:hover { border-color: rgba(214,27,27,0.2); }
+    .about-value-title { font-size: 12px; color: #D61B1B; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; }
+    .about-value-desc { font-size: 13px; color: #AFAFAF; }
+
+    /* Contact */
+    .contact-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 48px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .form-group { margin-bottom: 0; }
+    .form-label { display: block; font-size: 12px; color: #AFAFAF; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; font-family: 'Space Grotesk'; }
+    .form-input { width: 100%; padding: 14px 16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; font-size: 14px; outline: none; transition: all 0.3s; font-family: 'Inter'; }
+    .form-input::placeholder { color: rgba(255,255,255,0.2); }
+    .form-input:focus { border-color: rgba(214,27,27,0.5); box-shadow: 0 0 20px rgba(214,27,27,0.1); }
+    textarea.form-input { resize: vertical; min-height: 120px; }
+    .form-submit { padding: 16px 32px; background: linear-gradient(135deg, #D61B1B, #FF3B3B); color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; letter-spacing: 1px; cursor: pointer; transition: all 0.3s; font-family: 'Space Grotesk'; text-transform: uppercase; box-shadow: 0 4px 20px rgba(214,27,27,0.3); }
+    .form-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(214,27,27,0.4); }
+    .social-links { margin-top: 40px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; }
+    .social-link { display: flex; align-items: center; gap: 8px; color: #AFAFAF; text-decoration: none; font-size: 13px; transition: color 0.3s; font-family: 'Space Grotesk'; }
+    .social-link:hover { color: #D61B1B; }
+
+    /* Footer */
+    .footer { position: relative; padding: 48px 64px; border-top: 1px solid rgba(255,255,255,0.06); z-index: 1; }
+    .footer-inner { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px; }
+    .footer-social { display: flex; gap: 20px; }
+    .footer-social a { color: #666; transition: color 0.3s; }
+    .footer-social a:hover { color: #D61B1B; }
+    .footer-copy { font-size: 12px; color: #666; }
+
+    /* Noise Overlay */
+    .noise-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9998; opacity: 0.03; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); }
+
+    /* Keyframes */
+    @keyframes heroFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+    @keyframes aboutFloat { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-10px) scale(1.05); } }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+      .hero-artwork { order: -1; }
+      .skills-grid { grid-template-columns: 1fr; gap: 40px; }
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .section { padding: 80px 32px; }
+      .hero { padding: 100px 32px 60px; }
+      .footer { padding: 32px; }
+      .nav-links, .nav-cta { display: none; }
+      .mobile-toggle { display: block; }
+      .navbar { padding: 16px 24px; }
+    }
+    @media (max-width: 768px) {
+      .projects-grid { grid-template-columns: 1fr; }
+      .achievements-grid { grid-template-columns: repeat(2, 1fr); }
+      .form-grid { grid-template-columns: 1fr; }
+      .about-values { grid-template-columns: 1fr; }
+      .footer-inner { flex-direction: column; text-align: center; }
+      .section-title { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Noise Overlay -->
+  <div class="noise-overlay"></div>
+
+  <!-- Loading Screen -->
+  <div id="loading-screen">
+    <svg class="load-logo" viewBox="0 0 100 100">
+      <defs>
+        <linearGradient id="loadGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#D61B1B"/>
+          <stop offset="100%" stop-color="#FF3B3B"/>
+        </linearGradient>
+        <filter id="loadGlow">
+          <feGaussianBlur stdDeviation="4" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <circle cx="50" cy="50" r="45" fill="none" stroke="url(#loadGrad)" stroke-width="2" filter="url(#loadGlow)" opacity="0.8"/>
+      <circle cx="50" cy="50" r="35" fill="none" stroke="url(#loadGrad)" stroke-width="0.5" opacity="0.3"/>
+      <text x="50" y="62" text-anchor="middle" fill="url(#loadGrad)" font-size="36" font-weight="700" font-family="Orbitron, sans-serif" filter="url(#loadGlow)">RK</text>
+    </svg>
+    <p class="load-text">Entering The Universe</p>
+    <div class="load-bar-container">
+      <div class="load-bar" id="load-bar" style="width: 0%"></div>
+    </div>
+    <p class="load-percent" id="load-percent">0%</p>
+  </div>
+
+  <!-- Particle Canvas -->
+  <canvas id="ember-canvas"></canvas>
+
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <a href="#hero" class="nav-logo">
+        <svg width="40" height="40" viewBox="0 0 80 80">
+          <defs>
+            <linearGradient id="navGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#D61B1B"/>
+              <stop offset="100%" stop-color="#FF3B3B"/>
+            </linearGradient>
+          </defs>
+          <circle cx="40" cy="40" r="36" fill="none" stroke="url(#navGrad)" stroke-width="2"/>
+          <text x="40" y="52" text-anchor="middle" fill="url(#navGrad)" font-size="28" font-weight="700" font-family="Orbitron">RK</text>
+        </svg>
+        <div class="nav-logo-text" style="display:block;">
+          <div style="font-size:14px;font-weight:600;letter-spacing:2px;color:#fff;">ROHAN KRYTHOS</div>
+          <div style="font-size:10px;color:#AFAFAF;letter-spacing:3px;">DEVELOPER</div>
+        </div>
+      </a>
+    </div>
+    <div class="nav-links">
+      <a href="#hero">Home</a>
+      <a href="#projects">Projects</a>
+      <a href="#games">Games</a>
+      <a href="#skills">Skills</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a href="#contact" class="nav-cta">Let's Connect</a>
+    <button class="mobile-toggle" id="mobile-toggle" onclick="toggleMobileMenu()">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <div class="mobile-menu" id="mobile-menu">
+      <a href="#hero" onclick="toggleMobileMenu()">Home</a>
+      <a href="#projects" onclick="toggleMobileMenu()">Projects</a>
+      <a href="#games" onclick="toggleMobileMenu()">Games</a>
+      <a href="#skills" onclick="toggleMobileMenu()">Skills</a>
+      <a href="#about" onclick="toggleMobileMenu()">About</a>
+      <a href="#contact" onclick="toggleMobileMenu()">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-fade"></div>
+    <div class="hero-grid">
+      <div class="reveal" id="hero-left">
+        <p class="hero-label">Hello, I am</p>
+        <h1 class="hero-name">
+          <span>ROHAN</span>
+          <span class="red">KRYTHOS</span>
+        </h1>
+        <div class="hero-tags">
+          <span>Android Developer</span>
+          <span class="sep">|</span>
+          <span>Game Developer</span>
+          <span class="sep">|</span>
+          <span>AI Enthusiast</span>
+        </div>
+        <p class="hero-desc">I build immersive games and powerful apps that combine performance, design and innovation.</p>
+        <div class="hero-btns">
+          <a href="#projects" class="btn-primary">
+            Explore My Work
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+          </a>
+          <button class="btn-outline">
+            Download Resume
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          </button>
+        </div>
+        <div class="hero-scroll">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          Scroll Down
+        </div>
+      </div>
+      <div class="reveal-right" id="hero-right">
+        <div class="hero-artwork">
+          <div class="hero-artwork-inner">
+            <div class="hero-artwork-bg">
+              <svg width="200" height="200" viewBox="0 0 80 80" style="animation: heroFloat 6s ease-in-out infinite;">
+                <defs>
+                  <linearGradient id="heroGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#D61B1B"/>
+                    <stop offset="100%" stop-color="#FF3B3B"/>
+                  </linearGradient>
+                  <filter id="heroGlow">
+                    <feGaussianBlur stdDeviation="6" result="blur"/>
+                    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                  </filter>
+                </defs>
+                <circle cx="40" cy="40" r="36" fill="none" stroke="url(#heroGrad)" stroke-width="1.5" opacity="0.5"/>
+                <circle cx="40" cy="40" r="28" fill="none" stroke="url(#heroGrad)" stroke-width="0.5" opacity="0.3"/>
+                <text x="40" y="52" text-anchor="middle" fill="url(#heroGrad)" font-size="32" font-weight="700" filter="url(#heroGlow)" font-family="Orbitron">RK</text>
+              </svg>
+            </div>
+            <div class="hero-artwork-overlay"></div>
+            <div class="hero-badge">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D61B1B" stroke-width="2"><path d="M8 9l4-4 4 4M12 5v14"/></svg>
+            </div>
+          </div>
+          <div class="hero-ring-1"></div>
+          <div class="hero-ring-2"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Projects -->
+  <section class="section" id="projects">
+    <div class="section-inner">
+      <div class="reveal" style="text-align:center;margin-bottom:64px;">
+        <p class="section-subtitle">Portfolio</p>
+        <h2 class="section-title">Featured Projects</h2>
+      </div>
+      <div class="projects-grid">
+        <!-- Project 1: Habit Warrior -->
+        <div class="reveal project-card">
+          <div class="project-thumb">
+            <svg width="80" height="80" viewBox="0 0 80 80">
+              <defs>
+                <linearGradient id="p1" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#D61B1B"/>
+                  <stop offset="100%" stop-color="#FF3B3B"/>
+                </linearGradient>
+              </defs>
+              <path d="M40 10 L55 25 L55 55 L40 70 L25 55 L25 25 Z" fill="none" stroke="url(#p1)" stroke-width="2" opacity="0.6"/>
+              <path d="M40 20 L48 28 L48 52 L40 60 L32 52 L32 28 Z" fill="url(#p1)" opacity="0.2"/>
+              <circle cx="40" cy="40" r="8" fill="url(#p1)" opacity="0.8"/>
+            </svg>
+            <div class="project-thumb-overlay"></div>
+          </div>
+          <div class="project-content">
+            <h3 class="project-title">Habit Warrior</h3>
+            <p class="project-subtitle">Productivity App</p>
+            <p class="project-desc">Build better habits, stay consistent and become the strongest version of yourself.</p>
+            <div class="project-actions">
+              <button class="project-btn project-btn-secondary">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                Google Play
+              </button>
+              <button class="project-btn project-btn-primary">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+                Case Study
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 2: Sword & Axe -->
+        <div class="reveal project-card">
+          <div class="project-thumb">
+            <svg width="80" height="80" viewBox="0 0 80 80">
+              <defs>
+                <linearGradient id="p2" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#D61B1B"/>
+                  <stop offset="100%" stop-color="#FF3B3B"/>
+                </linearGradient>
+              </defs>
+              <path d="M20 60 L40 20 L60 60" fill="none" stroke="url(#p2)" stroke-width="2" opacity="0.6"/>
+              <path d="M30 60 L40 35 L50 60" fill="url(#p2)" opacity="0.2"/>
+              <circle cx="40" cy="20" r="4" fill="url(#p2)"/>
+            </svg>
+            <div class="project-thumb-overlay"></div>
+          </div>
+          <div class="project-content">
+            <h3 class="project-title">Sword & Axe</h3>
+            <p class="project-subtitle">22 Thrones</p>
+            <p class="project-desc">A cinematic 3D action game of war, strategy and glory.</p>
+            <div class="project-actions">
+              <button class="project-btn project-btn-primary">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Watch Trailer
+              </button>
+              <button class="project-btn project-btn-secondary">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+                Learn More
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 3: Warrior Game -->
+        <div class="reveal project-card">
+          <div class="project-thumb">
+            <div class="project-badge">Coming Soon</div>
+            <svg width="80" height="80" viewBox="0 0 80 80">
+              <defs>
+                <linearGradient id="p3" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#D61B1B"/>
+                  <stop offset="100%" stop-color="#FF3B3B"/>
+                </linearGradient>
+              </defs>
+              <rect x="20" y="20" width="40" height="40" rx="4" fill="none" stroke="url(#p3)" stroke-width="2" opacity="0.4"/>
+              <rect x="28" y="28" width="24" height="24" rx="2" fill="url(#p3)" opacity="0.15"/>
+              <path d="M35 40 L38 43 L45 36" fill="none" stroke="url(#p3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div class="project-thumb-overlay"></div>
+          </div>
+          <div class="project-content">
+            <h3 class="project-title">Warrior Game</h3>
+            <p class="project-subtitle">Coming Soon</p>
+            <p class="project-desc">An epic RPG adventure set in a dark fantasy world.</p>
+            <div class="project-actions">
+              <button class="project-btn project-btn-secondary">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                Wishlist
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section class="section" id="skills">
+    <div class="section-inner" style="max-width:1200px;">
+      <div class="reveal" style="text-align:center;margin-bottom:64px;">
+        <p class="section-subtitle">Expertise</p>
+        <h2 class="section-title">My Skills</h2>
+      </div>
+      <div class="skills-grid">
+        <!-- Skills Orbit -->
+        <div class="reveal-scale" id="skills-orbit">
+          <div class="skills-orbit">
+            <div class="orbit-container">
+              <div class="orbit-ring"></div>
+              <div class="orbit-ring-inner"></div>
+              <div class="orbit-center">
+                <svg width="40" height="40" viewBox="0 0 80 80">
+                  <defs>
+                    <linearGradient id="skGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#D61B1B"/>
+                      <stop offset="100%" stop-color="#FF3B3B"/>
+                    </linearGradient>
+                  </defs>
+                  <text x="40" y="52" text-anchor="middle" fill="url(#skGrad)" font-size="28" font-weight="700" font-family="Orbitron">RK</text>
+                </svg>
+              </div>
+              <div class="skill-node" style="top:0;left:50%;transform:translate(-50%,-50%);">Android</div>
+              <div class="skill-node" style="top:15%;right:0;transform:translate(50%,-50%);">Kotlin</div>
+              <div class="skill-node" style="top:50%;right:0;transform:translate(50%,-50%);">Firebase</div>
+              <div class="skill-node" style="bottom:15%;right:0;transform:translate(50%,50%);">Blender</div>
+              <div class="skill-node" style="bottom:0;left:50%;transform:translate(-50%,50%);">Git</div>
+              <div class="skill-node" style="bottom:15%;left:0;transform:translate(-50%,50%);">Photoshop</div>
+              <div class="skill-node" style="top:50%;left:0;transform:translate(-50%,-50%);">Unity</div>
+              <div class="skill-node" style="top:15%;left:0;transform:translate(-50%,-50%);">AI</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Achievements -->
+        <div class="reveal-right" id="achievements">
+          <p class="section-subtitle" style="text-align:left;">Track Record</p>
+          <h3 style="font-size:28px;font-weight:700;margin:0 0 32px;color:#fff;font-family:'Orbitron',sans-serif;">Achievements</h3>
+          <div class="achievements-grid">
+            <div class="achieve-card"><div class="achieve-value">15+</div><div class="achieve-label">PROJECTS</div></div>
+            <div class="achieve-card"><div class="achieve-value">8+</div><div class="achieve-label">APPS</div></div>
+            <div class="achieve-card"><div class="achieve-value">5+</div><div class="achieve-label">GAMES</div></div>
+            <div class="achieve-card"><div class="achieve-value">5000+</div><div class="achieve-label">HOURS CODED</div></div>
+            <div class="achieve-card"><div class="achieve-value">50K+</div><div class="achieve-label">USERS</div></div>
+            <div class="achieve-card"><div class="achieve-value">∞</div><div class="achieve-label">PASSION</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gameplay Showcase -->
+  <section class="section" id="games">
+    <div class="section-inner">
+      <div class="reveal" style="text-align:center;margin-bottom:64px;">
+        <p class="section-subtitle">Showcase</p>
+        <h2 class="section-title">Gameplay Showcase</h2>
+      </div>
+      <div class="showcase-scroll">
+        <div class="reveal showcase-card">
+          <div class="showcase-img">
+            <svg width="60" height="60" viewBox="0 0 60 60" fill="none" stroke="#D61B1B" stroke-width="2">
+              <path d="M15 45 L30 15 L45 45" opacity="0.6"/><circle cx="30" cy="15" r="4"/>
+            </svg>
+            <div class="showcase-img-overlay"></div>
+          </div>
+          <div class="showcase-info"><div class="showcase-dot"></div><span class="showcase-name">Combat</span></div>
+        </div>
+        <div class="reveal showcase-card">
+          <div class="showcase-img">
+            <svg width="60" height="60" viewBox="0 0 60 60" fill="none" stroke="#D61B1B" stroke-width="1.5">
+              <path d="M30 10 L35 25 L50 25 L38 35 L42 50 L30 40 L18 50 L22 35 L10 25 L25 25 Z" opacity="0.5"/>
+            </svg>
+            <div class="showcase-img-overlay"></div>
+          </div>
+          <div class="showcase-info"><div class="showcase-dot"></div><span class="showcase-name">Magic</span></div>
+        </div>
+        <div class="reveal showcase-card">
+          <div class="showcase-img">
+            <svg width="60" height="60" viewBox="0 0 60 60" fill="none" stroke="#D61B1B" stroke-width="2">
+              <rect x="15" y="15" width="30" height="30" rx="4" opacity="0.5"/>
+              <path d="M20 30 L25 25 L30 30 L35 20" stroke-linecap="round"/>
+            </svg>
+            <div class="showcase-img-overlay"></div>
+          </div>
+          <div class="showcase-info"><div class="showcase-dot"></div><span class="showcase-name">Boss Fight</span></div>
+        </div>
+        <div class="reveal showcase-card">
+          <div class="showcase-img">
+            <svg width="60" height="60" viewBox="0 0 60 60" fill="none" stroke="#D61B1B" stroke-width="2">
+              <path d="M30 10 L30 40 M20 20 L30 10 L40 20" stroke-linecap="round" opacity="0.5"/>
+              <path d="M15 45 Q30 35 45 45" opacity="0.3" stroke-width="1.5"/>
+            </svg>
+            <div class="showcase-img-overlay"></div>
+          </div>
+          <div class="showcase-info"><div class="showcase-dot"></div><span class="showcase-name">Archery</span></div>
+        </div>
+        <div class="reveal showcase-card">
+          <div class="showcase-img">
+            <svg width="60" height="60" viewBox="0 0 60 60" fill="none" stroke="#D61B1B" stroke-width="2">
+              <circle cx="30" cy="30" r="15" opacity="0.4"/>
+              <path d="M30 15 L30 20 M30 40 L30 45 M15 30 L20 30 M40 30 L45 30" opacity="0.5"/>
+            </svg>
+            <div class="showcase-img-overlay"></div>
+          </div>
+          <div class="showcase-info"><div class="showcase-dot"></div><span class="showcase-name">Survival</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="section" id="about">
+    <div class="section-inner" style="max-width:1200px;">
+      <div class="about-grid">
+        <div class="reveal-left" id="about-left">
+          <div class="about-img">
+            <div class="about-img-bg">
+              <svg width="150" height="150" viewBox="0 0 80 80" style="animation: aboutFloat 4s ease-in-out infinite;">
+                <defs>
+                  <linearGradient id="abGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#D61B1B"/>
+                    <stop offset="100%" stop-color="#FF3B3B"/>
+                  </linearGradient>
+                  <filter id="abGlow">
+                    <feGaussianBlur stdDeviation="4" result="blur"/>
+                    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                  </filter>
+                </defs>
+                <circle cx="40" cy="40" r="36" fill="none" stroke="url(#abGrad)" stroke-width="1.5" opacity="0.4"/>
+                <text x="40" y="52" text-anchor="middle" fill="url(#abGrad)" font-size="28" font-weight="700" filter="url(#abGlow)" font-family="Orbitron">RK</text>
+              </svg>
+            </div>
+            <div class="about-img-overlay"></div>
+          </div>
+        </div>
+        <div class="reveal-right" id="about-right">
+          <p class="section-subtitle" style="text-align:left;">About Me</p>
+          <h2 style="font-size:clamp(28px,4vw,40px);font-weight:700;margin:0 0 24px;color:#fff;line-height:1.2;font-family:'Orbitron',sans-serif;">
+            The Story Behind<br/>
+            <span style="background:linear-gradient(135deg,#D61B1B,#FF3B3B);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">The Code</span>
+          </h2>
+          <p style="font-size:15px;color:#AFAFAF;line-height:1.8;margin-bottom:20px;">
+            I am Rohan Krythos — a passionate developer who believes that every line of code is a step toward building something extraordinary. My journey began with a simple curiosity about how games work, and it evolved into a deep obsession with creating immersive digital experiences.
+          </p>
+          <p style="font-size:15px;color:#AFAFAF;line-height:1.8;margin-bottom:32px;">
+            From Android apps that solve real problems to Unity games that transport players to new worlds, I blend technical expertise with creative vision to deliver premium experiences.
+          </p>
+          <div class="about-values">
+            <div class="about-value-card"><div class="about-value-title">Mission</div><div class="about-value-desc">Build experiences that inspire</div></div>
+            <div class="about-value-card"><div class="about-value-title">Vision</div><div class="about-value-desc">Redefine digital interaction</div></div>
+            <div class="about-value-card"><div class="about-value-title">Values</div><div class="about-value-desc">Quality, Innovation, Passion</div></div>
+            <div class="about-value-card"><div class="about-value-title">Focus</div><div class="about-value-desc">Games, Apps, AI</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="section" id="contact">
+    <div class="section-inner" style="max-width:800px;">
+      <div class="reveal" style="text-align:center;margin-bottom:64px;">
+        <p class="section-subtitle">Get In Touch</p>
+        <h2 style="font-size:clamp(28px,4vw,40px);font-weight:700;margin:0 0 16px;color:#fff;line-height:1.2;font-family:'Orbitron',sans-serif;">
+          Let's Build Something<br/>
+          <span style="background:linear-gradient(135deg,#D61B1B,#FF3B3B);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Extraordinary</span>
+        </h2>
+        <p style="font-size:15px;color:#AFAFAF;max-width:500px;margin:0 auto;">I am always open to exciting opportunities and new challenges.</p>
+      </div>
+      <div class="reveal contact-card" id="contact-card">
+        <form onsubmit="event.preventDefault(); alert('Message sent!');">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Name</label>
+              <input type="text" placeholder="Your Name" class="form-input" required/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <input type="email" placeholder="your@email.com" class="form-input" required/>
+            </div>
+          </div>
+          <div class="form-group" style="margin-top:20px;">
+            <label class="form-label">Subject</label>
+            <input type="text" placeholder="Project Inquiry" class="form-input"/>
+          </div>
+          <div class="form-group" style="margin-top:20px;">
+            <label class="form-label">Message</label>
+            <textarea placeholder="Tell me about your project..." class="form-input"></textarea>
+          </div>
+          <div style="margin-top:20px;">
+            <button type="submit" class="form-submit">Send Message</button>
+          </div>
+        </form>
+        <div class="social-links">
+          <a href="#" class="social-link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+            GitHub
+          </a>
+          <a href="#" class="social-link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+            LinkedIn
+          </a>
+          <a href="#" class="social-link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Email
+          </a>
+          <a href="#" class="social-link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            Google Play
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <svg width="32" height="32" viewBox="0 0 80 80">
+          <defs>
+            <linearGradient id="ftGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#D61B1B"/>
+              <stop offset="100%" stop-color="#FF3B3B"/>
+            </linearGradient>
+          </defs>
+          <circle cx="40" cy="40" r="36" fill="none" stroke="url(#ftGrad)" stroke-width="2"/>
+          <text x="40" y="50" text-anchor="middle" fill="url(#ftGrad)" font-size="24" font-weight="700" font-family="Orbitron">RK</text>
+        </svg>
+        <div>
+          <div style="font-size:14px;font-weight:600;color:#fff;letter-spacing:1px;font-family:'Orbitron',sans-serif;">Rohan Krythos</div>
+          <div style="font-size:11px;color:#AFAFAF;letter-spacing:3px;">Code. Create. Conquer.</div>
+        </div>
+      </div>
+      <div class="footer-social">
+        <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg></a>
+        <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg></a>
+        <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg></a>
+        <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.25 29 29 0 00-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg></a>
+      </div>
+      <div class="footer-copy">2024 Rohan Krythos. All Rights Reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+
+    // Loading Screen
+    (function() {
+      let progress = 0;
+      const bar = document.getElementById('load-bar');
+      const percent = document.getElementById('load-percent');
+      const screen = document.getElementById('loading-screen');
+
+      const interval = setInterval(function() {
+        progress += Math.random() * 15 + 5;
+        if (progress >= 100) {
+          progress = 100;
+          clearInterval(interval);
+          setTimeout(function() {
+            screen.classList.add('hidden');
+            setTimeout(function() { screen.style.display = 'none'; }, 1000);
+          }, 500);
+        }
+        bar.style.width = progress + '%';
+        percent.textContent = Math.round(progress) + '%';
+      }, 150);
+    })();
+
+    // Particle System
+    (function() {
+      const canvas = document.getElementById('ember-canvas');
+      const ctx = canvas.getContext('2d');
+      let particles = [];
+      let animationId;
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+
+      function createParticles() {
+        particles = [];
+        const count = Math.min(80, Math.floor(window.innerWidth / 15));
+        const colors = ["#D61B1B", "#FF3B3B", "#8B0000", "#FF6B6B"];
+        for (let i = 0; i < count; i++) {
+          particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: Math.random() * 2 + 0.5,
+            speedX: (Math.random() - 0.5) * 0.3,
+            speedY: -Math.random() * 0.5 - 0.2,
+            opacity: Math.random() * 0.5 + 0.2,
+            color: colors[Math.floor(Math.random() * colors.length)]
+          });
+        }
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(function(p) {
+          p.x += p.speedX;
+          p.y += p.speedY;
+          if (p.y < -10) { p.y = canvas.height + 10; p.x = Math.random() * canvas.width; }
+          if (p.x < 0) p.x = canvas.width;
+          if (p.x > canvas.width) p.x = 0;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = p.opacity;
+          ctx.fill();
+        });
+        ctx.globalAlpha = 1;
+        animationId = requestAnimationFrame(animate);
+      }
+
+      resize();
+      createParticles();
+      animate();
+      window.addEventListener('resize', function() { resize(); createParticles(); });
+    })();
+
+    // Navbar Scroll Effect
+    (function() {
+      const navbar = document.getElementById('navbar');
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 50) navbar.classList.add('scrolled');
+        else navbar.classList.remove('scrolled');
+      });
+    })();
+
+    // Mobile Menu Toggle
+    function toggleMobileMenu() {
+      document.getElementById('mobile-menu').classList.toggle('active');
+    }
+
+    // Scroll Reveal Animation
+    (function() {
+      const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+      document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(function(el) {
+        observer.observe(el);
+      });
+    })();
+
+    // Hero elements immediate reveal after loading
+    setTimeout(function() {
+      document.getElementById('hero-left').classList.add('visible');
+      setTimeout(function() {
+        document.getElementById('hero-right').classList.add('visible');
+      }, 200);
+    }, 2500);
+  </script>
+</body>
+</html>
