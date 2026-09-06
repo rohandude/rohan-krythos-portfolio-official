@@ -249,6 +249,14 @@
       .scroll-anim-progress-track { width: 120px; bottom: 20px; }
       .scroll-anim-hint { bottom: 34px; font-size: 9px; letter-spacing: 2px; }
     }
+    /* Mobile: single-viewport autoplay intro instead of a long scroll-scrub section */
+    .scroll-anim-section.mobile-mode {
+      height: 100vh;
+    }
+    .scroll-anim-section.mobile-mode .scroll-anim-progress-track,
+    .scroll-anim-section.mobile-mode .scroll-anim-hint {
+      display: none;
+    }
     .hero-profile-box { width: 100%; display: flex; justify-content: center; margin-bottom: 28px; }
     .hero-profile-img { width: 220px; height: 220px; object-fit: contain; background: #0a0a0a; border-radius: 16px; border: 2px solid rgba(214,27,27,0.4); box-shadow: 0 0 30px rgba(214,27,27,0.2); padding: 8px; }
     .hero-site-description { display: flex; flex-direction: column; justify-content: center; padding: 40px 32px; }
@@ -1587,7 +1595,7 @@
       }
     })();
 
-    // ========== SCROLL-SCRUBBING HEADER ANIMATION ==========
+    // ========== HEADER ANIMATION: DESKTOP SCROLL-SCRUB / MOBILE AUTOPLAY ==========
     (function() {
       const section = document.getElementById('scroll-anim-section');
       const sticky = document.querySelector('.scroll-anim-sticky');
@@ -1599,6 +1607,10 @@
 
       const ctx = canvas.getContext('2d');
       const TOTAL_FRAMES = 240;
+      const isMobile = window.matchMedia('(max-width: 768px)').matches;
+      section.classList.toggle('mobile-mode', isMobile);
+      if (isMobile && hint) hint.style.display = 'none';
+
       // Frames 1-99 live in header-frame-A, 100-198 in header-frame-B, 199-240 in header-frame-C
       function framePath(n) {
         const padded = String(n).padStart(3, '0');
@@ -1611,19 +1623,14 @@
 
       const images = new Array(TOTAL_FRAMES + 1); // 1-indexed
       const loadedFlags = new Array(TOTAL_FRAMES + 1).fill(false);
-      let loadedCount = 0;
       let currentFrame = 1;
-      let highestLoadedSoFar = 0; // highest index loaded, for graceful fallback
 
       function markLoaded(n) {
-        if (!loadedFlags[n]) {
-          loadedFlags[n] = true;
-          loadedCount++;
-        }
-        if (n > highestLoadedSoFar) highestLoadedSoFar = n;
+        loadedFlags[n] = true;
         if (n === 1) {
           loader.classList.add('hidden');
-          drawFrame(1);
+          drawFrame(1, true);
+          if (isMobile) startMobileAutoplay();
         }
       }
 
@@ -1654,6 +1661,37 @@
         return 1;
       }
 
+      // Desktop: hard "cover" crop (fills the wide sticky viewport, minor left/right crop only)
+      function drawCover(img, cw, ch) {
+        const iw = img.naturalWidth, ih = img.naturalHeight;
+        const canvasRatio = cw / ch, imgRatio = iw / ih;
+        let sx, sy, sw, sh;
+        if (imgRatio > canvasRatio) {
+          sh = ih; sw = ih * canvasRatio; sx = (iw - sw) / 2; sy = 0;
+        } else {
+          sw = iw; sh = iw / canvasRatio; sx = 0; sy = (ih - sh) / 2;
+        }
+        ctx.drawImage(img, sx, sy, sw, sh, 0, 0, cw, ch);
+      }
+
+      // Mobile: blurred cover backdrop + sharp "contain" foreground so nothing important gets cropped
+      // on tall portrait screens (a 16:9 frame would otherwise lose most of its width to a hard crop).
+      function drawContainWithBackdrop(img, cw, ch) {
+        const iw = img.naturalWidth, ih = img.naturalHeight;
+        try {
+          ctx.save();
+          ctx.filter = 'blur(24px) brightness(0.55)';
+          const bScale = Math.max(cw / iw, ch / ih) * 1.15;
+          const bw = iw * bScale, bh = ih * bScale;
+          ctx.drawImage(img, (cw - bw) / 2, (ch - bh) / 2, bw, bh);
+          ctx.restore();
+        } catch (e) { /* filter unsupported on very old browsers - skip backdrop */ }
+
+        const fScale = Math.min(cw / iw, ch / ih);
+        const fw = iw * fScale, fh = ih * fScale;
+        ctx.drawImage(img, (cw - fw) / 2, (ch - fh) / 2, fw, fh);
+      }
+
       function drawFrame(requested, force) {
         const frameToShow = nearestAvailableFrame(requested);
         if (!force && frameToShow === currentFrame) return;
@@ -1662,27 +1700,15 @@
         if (!img || !img.complete || !img.naturalWidth) return;
 
         const cw = canvas.width, ch = canvas.height;
-        const iw = img.naturalWidth, ih = img.naturalHeight;
-        const canvasRatio = cw / ch;
-        const imgRatio = iw / ih;
-        let sx, sy, sw, sh;
-        if (imgRatio > canvasRatio) {
-          // image wider than canvas -> crop left/right
-          sh = ih;
-          sw = ih * canvasRatio;
-          sx = (iw - sw) / 2;
-          sy = 0;
-        } else {
-          // image taller than canvas -> crop top/bottom
-          sw = iw;
-          sh = iw / canvasRatio;
-          sx = 0;
-          sy = (ih - sh) / 2;
-        }
         ctx.clearRect(0, 0, cw, ch);
-        ctx.drawImage(img, sx, sy, sw, sh, 0, 0, cw, ch);
+        if (isMobile) {
+          drawContainWithBackdrop(img, cw, ch);
+        } else {
+          drawCover(img, cw, ch);
+        }
       }
 
+      // ---------- DESKTOP: scroll-scrubbing ----------
       function updateFromScroll() {
         const rect = section.getBoundingClientRect();
         const scrollable = section.offsetHeight - window.innerHeight;
@@ -1699,25 +1725,51 @@
       }
 
       let ticking = false;
-      function onScrollOrResize() {
+      function onScroll() {
         if (!ticking) {
-          window.requestAnimationFrame(function() {
-            updateFromScroll();
-            ticking = false;
-          });
+          window.requestAnimationFrame(function() { updateFromScroll(); ticking = false; });
           ticking = true;
         }
       }
 
-      window.addEventListener('scroll', onScrollOrResize, { passive: true });
+      // ---------- MOBILE: one-time autoplay when the section enters view ----------
+      let autoplayStarted = false;
+      function startMobileAutoplay() {
+        if (autoplayStarted) return;
+        autoplayStarted = true;
+        const DURATION = 4200; // ms for a full play-through
+        const t0 = performance.now();
+        function step(now) {
+          const t = Math.min(1, (now - t0) / DURATION);
+          const frameIndex = Math.max(1, Math.min(TOTAL_FRAMES, Math.round(t * (TOTAL_FRAMES - 1)) + 1));
+          drawFrame(frameIndex);
+          if (t < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      }
+
+      if (isMobile) {
+        const io = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting && images[1] && images[1].complete) {
+              startMobileAutoplay();
+              io.disconnect();
+            }
+          });
+        }, { threshold: 0.25 });
+        io.observe(section);
+      } else {
+        window.addEventListener('scroll', onScroll, { passive: true });
+      }
+
       window.addEventListener('resize', function() {
         resizeCanvas();
-        updateFromScroll();
+        if (!isMobile) updateFromScroll();
       });
 
       // Initial setup
       resizeCanvas();
-      updateFromScroll();
+      if (!isMobile) updateFromScroll();
     })();
 
     // Profile 3D tilt on mouse move
