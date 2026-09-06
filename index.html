@@ -5,6 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rohan Krythos | Android & Game Developer</title>
   <meta name="description" content="Code. Create. Conquer. I build cinematic games and high-performance Android applications.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+  <!-- Open Graph / Social Share -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Rohan Krythos | Android & Game Developer">
+  <meta property="og:description" content="Code. Create. Conquer. I build cinematic games and high-performance Android applications.">
+  <meta property="og:image" content="https://rohandude.github.io/1000205886.jpg">
+  <meta property="og:url" content="https://rohandude.github.io/">
+  <meta property="og:site_name" content="Rohan Krythos">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Rohan Krythos | Android & Game Developer">
+  <meta name="twitter:description" content="Code. Create. Conquer. I build cinematic games and high-performance Android applications.">
+  <meta name="twitter:image" content="https://rohandude.github.io/1000205886.jpg">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -177,8 +198,57 @@
       transform: translateY(0);
     }
     @keyframes scrollBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
-    .page-header-banner { width: 100%; max-width: 1200px; margin: 0 auto; padding: 96px 24px 0; position: relative; z-index: 5; }
-    .page-header-banner img { width: 100%; max-height: 260px; object-fit: cover; object-position: center 25%; border-radius: 14px; border: 1px solid rgba(255,255,255,0.08); display: block; }
+    /* ========== SCROLL-SCRUBBING HEADER ANIMATION ========== */
+    .scroll-anim-section {
+      position: relative;
+      width: 100%;
+      height: 300vh; /* scroll distance that "plays" the sequence */
+      z-index: 5;
+    }
+    .scroll-anim-sticky {
+      position: sticky;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #050505;
+    }
+    #scrollAnimCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .scroll-anim-loader {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      background: #050505;
+      z-index: 6;
+      transition: opacity 0.6s var(--ease-smooth), visibility 0.6s;
+    }
+    .scroll-anim-loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    .scroll-anim-loader-ring { width: 48px; height: 48px; border-radius: 50%; border: 2px solid rgba(214,27,27,0.2); border-top-color: #D61B1B; animation: spin 0.9s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .scroll-anim-loader-text { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #AFAFAF; font-family: 'Space Grotesk'; }
+    .scroll-anim-progress-track { position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%); width: 160px; height: 2px; background: rgba(255,255,255,0.1); border-radius: 1px; overflow: hidden; z-index: 7; opacity: 0; transition: opacity 0.5s; }
+    .scroll-anim-sticky:hover .scroll-anim-progress-track,
+    .scroll-anim-section.in-view .scroll-anim-progress-track { opacity: 1; }
+    .scroll-anim-progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #D61B1B, #FF3B3B); }
+    .scroll-anim-hint { position: absolute; bottom: 44px; left: 50%; transform: translateX(-50%); font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #AFAFAF; font-family: 'Space Grotesk'; z-index: 7; opacity: 0.7; display: flex; align-items: center; gap: 8px; transition: opacity 0.4s; }
+    .scroll-anim-section.at-end .scroll-anim-hint { opacity: 0; }
+    @media (max-width: 768px) {
+      .scroll-anim-section { height: 250vh; }
+      .scroll-anim-progress-track { width: 120px; bottom: 20px; }
+      .scroll-anim-hint { bottom: 34px; font-size: 9px; letter-spacing: 2px; }
+    }
     .hero-profile-box { width: 100%; display: flex; justify-content: center; margin-bottom: 28px; }
     .hero-profile-img { width: 220px; height: 220px; object-fit: contain; background: #0a0a0a; border-radius: 16px; border: 2px solid rgba(214,27,27,0.4); box-shadow: 0 0 30px rgba(214,27,27,0.2); padding: 8px; }
     .hero-site-description { display: flex; flex-direction: column; justify-content: center; padding: 40px 32px; }
@@ -441,41 +511,7 @@
     .shimmer::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); animation: shimmer 3s infinite; }
     @keyframes shimmer { 0% { left: -100%; } 100% { left: 200%; } }
 
-    /* ========== HEADER BANNER ENHANCED ========== */
-    .header-img-wrapper {
-      position: relative;
-      width: 100%;
-      border-radius: 14px;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.08);
-      transform-style: preserve-3d;
-      perspective: 1000px;
-    }
-    .header-img-wrapper::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(214,27,27,0.15), transparent 50%, rgba(255,59,59,0.1));
-      z-index: 2;
-      opacity: 0;
-      transition: opacity 1s var(--ease-smooth);
-      pointer-events: none;
-    }
-    .header-img-wrapper:hover::before {
-      opacity: 1;
-    }
-    .header-img-wrapper img {
-      width: 100%;
-      max-height: 260px;
-      object-fit: cover;
-      object-position: center 25%;
-      display: block;
-      transition: transform 1.2s var(--ease-out-expo), filter 0.8s var(--ease-smooth);
-    }
-    .header-img-wrapper:hover img {
-      transform: scale(1.05) translateY(-5px);
-      filter: brightness(1.1) contrast(1.05);
-    }
+    /* ========== HEADER SCROLL-ANIM OVERLAYS ========== */
     .header-scanline {
       position: absolute;
       inset: 0;
@@ -483,53 +519,23 @@
         0deg,
         transparent,
         transparent 2px,
-        rgba(0,0,0,0.03) 2px,
-        rgba(0,0,0,0.03) 4px
+        rgba(0,0,0,0.05) 2px,
+        rgba(0,0,0,0.05) 4px
       );
       z-index: 3;
       pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.5s;
-    }
-    .header-img-wrapper:hover .header-scanline {
-      opacity: 1;
+      opacity: 0.5;
     }
     .header-vignette {
       position: absolute;
       inset: 0;
-      box-shadow: inset 0 0 80px rgba(0,0,0,0.5);
+      box-shadow: inset 0 0 140px rgba(0,0,0,0.6);
       z-index: 4;
       pointer-events: none;
-      transition: box-shadow 0.8s var(--ease-smooth);
+      transition: box-shadow 1s var(--ease-smooth);
     }
-    .header-img-wrapper:hover .header-vignette {
-      box-shadow: inset 0 0 120px rgba(214,27,27,0.15);
-    }
-
-    /* Header entrance animation */
-    .page-header-banner {
-      width: 100%;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 96px 24px 0;
-      position: relative;
-      z-index: 5;
-      opacity: 0;
-      transform: translateY(-40px) scale(0.95);
-      filter: blur(15px);
-      transition: all 1.5s var(--ease-out-expo);
-    }
-    .page-header-banner.visible {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-      filter: blur(0);
-    }
-    .page-header-banner.visible .header-img-wrapper {
-      animation: headerPulse 3s ease-in-out infinite 2s;
-    }
-    @keyframes headerPulse {
-      0%, 100% { box-shadow: 0 0 0 rgba(214,27,27,0); }
-      50% { box-shadow: 0 0 30px rgba(214,27,27,0.15); }
+    .scroll-anim-section.in-view .header-vignette {
+      box-shadow: inset 0 0 100px rgba(214,27,27,0.12);
     }
 
     /* ========== PROFILE IMAGE ENHANCED ========== */
@@ -742,7 +748,7 @@
     <div style="display:flex;align-items:center;gap:10px;">
       <a href="#hero" class="nav-logo" id="nav-logo">
         <div class="nav-logo-img-wrap">
-          <img src="1000205886.png" alt="Rohan Krythos" id="nav-logo-img">
+          <img src="1000205886.jpg" alt="Rohan Krythos" id="nav-logo-img">
           <div class="nav-logo-ring"></div>
         </div>
         <div class="nav-logo-text" style="display:block;">
@@ -773,13 +779,24 @@
     </div>
   </nav>
 
-  <div class="page-header-banner reveal-blur" id="header-banner">
-    <div class="header-img-wrapper">
-      <img src="1000205890.png" alt="Rohan Krythos Header" id="header-img">
+  <section class="scroll-anim-section" id="scroll-anim-section">
+    <div class="scroll-anim-sticky">
+      <canvas id="scrollAnimCanvas" aria-label="Rohan Krythos cinematic intro animation"></canvas>
       <div class="header-scanline"></div>
       <div class="header-vignette"></div>
+      <div class="scroll-anim-loader" id="scrollAnimLoader">
+        <div class="scroll-anim-loader-ring"></div>
+        <p class="scroll-anim-loader-text">Loading Cinematic Intro</p>
+      </div>
+      <div class="scroll-anim-hint" id="scrollAnimHint">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        Scroll To Play
+      </div>
+      <div class="scroll-anim-progress-track">
+        <div class="scroll-anim-progress-fill" id="scrollAnimProgress"></div>
+      </div>
     </div>
-  </div>
+  </section>
 
   <section class="hero" id="hero">
     <div class="hero-bg"></div>
@@ -804,10 +821,10 @@
             Explore My Work
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
           </a>
-          <button class="btn-outline" onclick="alert('Resume download coming soon!')">
-            Download Resume
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-          </button>
+          <a href="#contact" class="btn-outline">
+            Get In Touch
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+          </a>
         </div>
         <div class="hero-scroll">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
@@ -820,7 +837,7 @@
           <div class="profile-ring-middle"></div>
           <div class="profile-ring-inner"></div>
           <div class="profile-glow"></div>
-          <img src="1000205886.png" alt="Rohan Krythos Profile" class="hero-profile-img" id="profile-img">
+          <img src="1000205886.jpg" alt="Rohan Krythos Profile" class="hero-profile-img" id="profile-img">
           <div class="profile-particles" id="profile-particles"></div>
         </div>
         <div class="hero-artwork">
@@ -843,7 +860,7 @@
       <div class="projects-grid stagger-children">
         <div class="reveal project-card">
           <div class="project-thumb img-reveal">
-            <img src="1000202568.png" alt="Habit of a Warrior">
+            <img src="habit-thumb-banner.jpg" alt="Habit of a Warrior">
             <div class="project-thumb-overlay"></div>
           </div>
           <div class="project-content">
@@ -851,10 +868,10 @@
             <p class="project-subtitle">Productivity App</p>
             <p class="project-desc">A warrior-themed habit tracker built for Android. Build habits, break weaknesses, and level up your discipline with streaks, XP, and rankings.</p>
             <div class="project-actions">
-              <button class="project-btn project-btn-secondary" onclick="alert('Coming to Google Play soon!')">
+              <a href="https://play.google.com/store/apps/details?id=com.habitwarrior" target="_blank" rel="noopener" class="project-btn project-btn-secondary" style="text-decoration:none;">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                 Google Play
-              </button>
+              </a>
               <button class="project-btn project-btn-primary" onclick="document.getElementById('showcase').scrollIntoView({behavior:'smooth'})">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
                 View Screenshots
@@ -865,7 +882,7 @@
 
         <div class="reveal project-card">
           <div class="project-thumb img-reveal">
-            <img src="1000149229.png" alt="Sword & Axe: 22 Thrones">
+            <img src="1000149229.jpg" alt="Sword & Axe: 22 Thrones">
             <div class="project-thumb-overlay"></div>
           </div>
           <div class="project-content">
@@ -873,7 +890,7 @@
             <p class="project-subtitle">3D Action Game</p>
             <p class="project-desc">A cinematic 3D action game of war, strategy and glory. Battle through 22 kingdoms, forge alliances, and claim your throne in an epic warrior saga.</p>
             <div class="project-actions">
-              <button class="project-btn project-btn-primary" onclick="document.getElementById('showcase').scrollIntoView({behavior:'smooth'})">
+              <button class="project-btn project-btn-primary" onclick="document.querySelector('[data-tab=&quot;game&quot;]').click(); document.getElementById('showcase').scrollIntoView({behavior:'smooth'});">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                 Watch Gameplay
               </button>
@@ -888,7 +905,7 @@
         <div class="reveal project-card">
           <div class="project-thumb img-reveal">
             <div class="project-badge">In Development</div>
-            <img src="1000167475.png" alt="Warrior Game">
+            <img src="1000167475.jpg" alt="Warrior Game">
             <div class="project-thumb-overlay"></div>
           </div>
           <div class="project-content">
@@ -899,6 +916,29 @@
               <button class="project-btn project-btn-secondary" onclick="alert('Wishlist coming soon!')">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
                 Wishlist
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal project-card">
+          <div class="project-thumb img-reveal">
+            <div class="project-badge">Coming Soon</div>
+            <img src="nutritrack-screen-dashboard.jpg" alt="NutriTrack Pro Max">
+            <div class="project-thumb-overlay"></div>
+          </div>
+          <div class="project-content">
+            <h3 class="project-title">NutriTrack Pro Max</h3>
+            <p class="project-subtitle">Nutrition & Fitness App</p>
+            <p class="project-desc">A smart nutrition tracker that helps you fuel a better you — track calories, macros, water intake, and get a personalized nutrition guide. Currently in active development.</p>
+            <div class="project-actions">
+              <button class="project-btn project-btn-secondary" onclick="document.querySelector('[data-tab=&quot;nutritrack&quot;]').click(); document.getElementById('showcase').scrollIntoView({behavior:'smooth'});">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                Wishlist
+              </button>
+              <button class="project-btn project-btn-primary" onclick="document.querySelector('[data-tab=&quot;nutritrack&quot;]').click(); document.getElementById('showcase').scrollIntoView({behavior:'smooth'});">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+                View Screenshots
               </button>
             </div>
           </div>
@@ -918,6 +958,7 @@
         <div class="tabs-nav">
           <button class="tab-btn active" data-tab="app">Habit of a Warrior</button>
           <button class="tab-btn" data-tab="game">Sword & Axe: 22 Thrones</button>
+          <button class="tab-btn" data-tab="nutritrack">NutriTrack Pro Max</button>
           <button class="tab-btn" data-tab="dev">About the Developer</button>
         </div>
 
@@ -925,7 +966,7 @@
           <div class="app-showcase">
             <div class="app-header-row">
               <div class="app-logo-wrap reveal-scale">
-                <img src="1000202568.png" alt="Habit of a Warrior Logo">
+                <img src="habit-logo.jpg" alt="Habit of a Warrior Logo">
               </div>
               <div class="app-title-block reveal-left">
                 <h3>Habit of a Warrior</h3>
@@ -934,19 +975,22 @@
             </div>
             <div class="app-screens-row stagger-children">
               <div class="app-screen reveal">
-                <img src="1000192575.png" alt="Home Screen">
+                <img src="habit-screen-home.jpg" alt="Home Screen">
               </div>
               <div class="app-screen reveal">
-                <img src="1000192577.png" alt="Leaderboard">
+                <img src="habit-screen-leaderboard.jpg" alt="Leaderboard with Theme Customization">
               </div>
               <div class="app-screen reveal">
-                <img src="1000203152.png" alt="Travel Board">
+                <img src="habit-screen-travelboard.jpg" alt="Travel Board Stats">
               </div>
               <div class="app-screen reveal">
-                <img src="1000205440.jpg" alt="Battle Alarm">
+                <img src="habit-screen-run.jpg" alt="War Path Run Tracking">
               </div>
               <div class="app-screen reveal">
-                <img src="1000208083.jpg" alt="My Habits">
+                <img src="habit-screen-alarm-puzzle.jpg" alt="Battle Alarm Puzzle Challenge">
+              </div>
+              <div class="app-screen reveal">
+                <img src="habit-screen-run-complete.jpg" alt="Run Completed Summary">
               </div>
             </div>
 
@@ -968,6 +1012,10 @@
                 <li>🌙 Clean, modern dark theme</li>
               </ul>
               <p class="showcase-cta">Discipline is your greatest weapon. Every habit completed is another step toward becoming the strongest version of yourself.<br>Start your warrior journey today!</p>
+              <a href="https://play.google.com/store/apps/details?id=com.habitwarrior" target="_blank" rel="noopener" class="btn-primary" style="margin-top:16px;text-decoration:none;display:inline-flex;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                Get it on Google Play
+              </a>
             </div>
           </div>
         </div>
@@ -982,19 +1030,19 @@
             </div>
             <div class="game-screens-row stagger-children">
               <div class="game-screen reveal">
-                <img src="1000149229.png" alt="Combat Controls">
+                <img src="1000149229.jpg" alt="Combat Controls">
               </div>
               <div class="game-screen reveal">
-                <img src="1000149310.png" alt="World Map">
+                <img src="1000149310.jpg" alt="World Map">
               </div>
               <div class="game-screen reveal">
-                <img src="1000167475.png" alt="Hero Profile">
+                <img src="1000167475.jpg" alt="Hero Profile">
               </div>
               <div class="game-screen reveal">
-                <img src="1000167477.png" alt="Desert Battle">
+                <img src="1000167477.jpg" alt="Desert Battle">
               </div>
               <div class="game-screen reveal">
-                <img src="1000167557.png" alt="Boss Fight">
+                <img src="1000167557.jpg" alt="Boss Fight">
               </div>
             </div>
 
@@ -1022,6 +1070,63 @@
           </div>
         </div>
 
+        <div class="tab-panel" id="tab-nutritrack">
+          <div class="app-showcase">
+            <div class="app-header-row">
+              <div class="app-logo-wrap reveal-scale">
+                <img src="nutritrack-logo.jpg" alt="NutriTrack Pro Max Logo">
+              </div>
+              <div class="app-title-block reveal-left">
+                <h3>NutriTrack Pro Max</h3>
+                <div class="tagline">Fuel A Better You</div>
+              </div>
+            </div>
+            <div class="app-screens-row stagger-children">
+              <div class="app-screen reveal">
+                <img src="nutritrack-screen-dashboard.jpg" alt="Dashboard">
+              </div>
+              <div class="app-screen reveal">
+                <img src="nutritrack-screen-analytics.jpg" alt="Analytics">
+              </div>
+              <div class="app-screen reveal">
+                <img src="nutritrack-screen-guide.jpg" alt="Nutrition Guide">
+              </div>
+            </div>
+
+            <div class="showcase-description reveal">
+              <p class="short-desc">Track calories, macros, and water — and learn to eat smarter, every single day.</p>
+              <p><strong style="color:#fff;">NutriTrack Pro Max</strong> is a smart nutrition and fitness companion that helps you understand what you eat and how it fuels your body. From daily calorie goals to a full nutrition education guide, it's built to make healthy eating simple and sustainable.</p>
+              <p>Track your macros, stay on top of hydration, and get personalized insights that adjust as your habits improve.</p>
+              <h4 class="showcase-features-title">Features</h4>
+              <ul class="feature-list">
+                <li>🔥 Daily calorie & macro tracking</li>
+                <li>💧 Water intake tracker with quick-add</li>
+                <li>📊 7/30/90-day analytics & trends</li>
+                <li>🥗 Built-in nutrition guide & recipes</li>
+                <li>🎯 Personalized nutrition score & insights</li>
+                <li>📅 Weekly consistency tracking</li>
+                <li>🍽️ Curated healthy recipe library</li>
+                <li>🌙 Clean, modern dark theme</li>
+              </ul>
+              <p class="showcase-cta">Good nutrition fuels a better you.<br>NutriTrack Pro Max is currently in active development — stay tuned!</p>
+              <form action="https://formsubmit.co/appsupportwarrior@gmail.com" method="POST" style="margin-top:20px;max-width:420px;">
+                <input type="hidden" name="_subject" value="NutriTrack Pro Max - Wishlist Signup">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_next" value="https://rohandude.github.io/#showcase">
+                <input type="hidden" name="App" value="NutriTrack Pro Max">
+                <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                  <input type="email" name="email" placeholder="your@email.com" class="form-input" style="flex:1;min-width:200px;" required/>
+                  <button type="submit" class="project-btn project-btn-secondary" style="white-space:nowrap;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                    Notify Me
+                  </button>
+                </div>
+                <p style="font-size:12px;color:#AFAFAF;margin-top:8px;">Get an email the moment NutriTrack Pro Max launches. No spam.</p>
+              </form>
+            </div>
+          </div>
+        </div>
+
         <div class="tab-panel" id="tab-dev">
           <div class="about-tab-grid">
             <div class="about-photo-stack">
@@ -1029,7 +1134,7 @@
                 <img src="1000177618.jpg" alt="Rohan Krythos">
               </div>
               <div class="about-photo-main reveal-scale">
-                <img src="1000205874.png" alt="Rohan Krythos">
+                <img src="1000205874.jpg" alt="Rohan Krythos">
               </div>
               <div class="about-photo-2 reveal-right">
                 <img src="1000186588.png" alt="Rohan Krythos">
@@ -1037,18 +1142,19 @@
             </div>
             <div class="about-info reveal-right">
               <h3>Rohan Krythos</h3>
+              <div style="font-size:13px;color:#C9A84C;letter-spacing:2px;margin-bottom:12px;font-family:'Space Grotesk';text-transform:uppercase;">Real Name: Rohan Bairagi</div>
               <div class="location">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
                 Haryana, India
               </div>
               <p>
-                I am <strong style="color:#fff;">Rohan Krythos</strong> — a passionate developer who believes that every line of code is a step toward building something extraordinary. My journey began with a simple curiosity about how games work, and it evolved into a deep obsession with creating immersive digital experiences.
+                I am <strong style="color:#fff;">Rohan Bairagi</strong>, known in the digital world as <strong style="color:#fff;">Rohan Krythos</strong> — a passionate developer who believes that every line of code is a step toward building something extraordinary. My journey began with a simple curiosity about how games work, and it evolved into a deep obsession with creating immersive digital experiences.
               </p>
               <p>
                 From Android apps that solve real problems to Unity games that transport players to new worlds, I blend technical expertise with creative vision to deliver premium experiences. Based in <strong style="color:#fff;">Haryana, India</strong>, I am constantly pushing boundaries — currently developing <strong style="color:#D61B1B;">3 new games</strong> and <strong style="color:#D61B1B;">1 new app</strong> alongside my existing projects.
               </p>
               <p>
-                My official projects include the warrior-themed productivity app <strong style="color:#fff;">"Habit of a Warrior"</strong> and the epic 3D action game <strong style="color:#fff;">"Sword & Axe: 22 Thrones"</strong>. I don't just build software — I forge digital weapons for the modern age.
+                My official projects include the warrior-themed productivity app <strong style="color:#fff;">"Habit of a Warrior"</strong> (live on Google Play), the epic 3D action game <strong style="color:#fff;">"Sword & Axe: 22 Thrones"</strong>, and the upcoming nutrition companion <strong style="color:#fff;">"NutriTrack Pro Max"</strong>. I don't just build software — I forge digital weapons for the modern age.
               </p>
               <div class="about-stats-row stagger-children">
                 <div class="about-stat reveal">
@@ -1155,7 +1261,7 @@
         <p style="font-size:15px;color:#AFAFAF;max-width:500px;margin:0 auto;">I am always open to exciting opportunities and new challenges.</p>
       </div>
       <div class="reveal contact-card" id="contact-card">
-        <form action="https://formsubmit.co/rohanbairagi06042006@gmail.com" method="POST">
+        <form action="https://formsubmit.co/appsupportwarrior@gmail.com" method="POST">
           <input type="hidden" name="_subject" value="New message from Portfolio Website">
           <input type="hidden" name="_template" value="table">
           <input type="hidden" name="_captcha" value="false">
@@ -1187,13 +1293,21 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
             Instagram
           </a>
-          <a href="mailto:rohanbairagi06042006@gmail.com" class="social-link">
+          <a href="mailto:appsupportwarrior@gmail.com" class="social-link">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
             Email
           </a>
           <a href="https://play.google.com/store/apps/details?id=com.rohanbairagi.swordandaxe22thrones" target="_blank" rel="noopener" class="social-link">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-            Google Play
+            Sword & Axe
+          </a>
+          <a href="https://play.google.com/store/apps/details?id=com.habitwarrior" target="_blank" rel="noopener" class="social-link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            Habit of a Warrior
+          </a>
+          <a href="https://play.google.com/store/apps/dev?id=7652006980854710652" target="_blank" rel="noopener" class="social-link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+            All My Apps
           </a>
         </div>
       </div>
@@ -1203,7 +1317,7 @@
   <footer class="footer">
     <div class="footer-inner">
       <div style="display:flex;align-items:center;gap:12px;">
-        <img src="1000205886.png" alt="Rohan Krythos" style="width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid #D61B1B;">
+        <img src="1000205886.jpg" alt="Rohan Krythos" style="width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid #D61B1B;">
         <div>
           <div style="font-size:14px;font-weight:600;color:#fff;letter-spacing:1px;font-family:'Orbitron',sans-serif;">Rohan Krythos</div>
           <div style="font-size:11px;color:#AFAFAF;letter-spacing:3px;">Code. Create. Conquer.</div>
@@ -1211,8 +1325,8 @@
       </div>
       <div class="footer-social">
         <a href="https://www.instagram.com/rohan_bairagi79?igsh=M2M0cDBtNXMzMDZh" target="_blank" rel="noopener" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
-        <a href="mailto:rohanbairagi06042006@gmail.com" aria-label="Email"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
-        <a href="https://play.google.com/store/apps/details?id=com.rohanbairagi.swordandaxe22thrones" target="_blank" rel="noopener" aria-label="Google Play"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></a>
+        <a href="mailto:appsupportwarrior@gmail.com" aria-label="Email"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+        <a href="https://play.google.com/store/apps/dev?id=7652006980854710652" target="_blank" rel="noopener" aria-label="Google Play Developer Page"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></a>
       </div>
       <div class="footer-copy">2024 Rohan Krythos. All Rights Reserved.</div>
     </div>
@@ -1220,24 +1334,52 @@
 
   <script>
     (function() {
-      let progress = 0;
       const bar = document.getElementById('load-bar');
       const percent = document.getElementById('load-percent');
       const screen = document.getElementById('loading-screen');
 
-      const interval = setInterval(function() {
-        progress += Math.random() * 15 + 5;
-        if (progress >= 100) {
-          progress = 100;
-          clearInterval(interval);
-          setTimeout(function() {
-            screen.classList.add('hidden');
-            setTimeout(function() { screen.style.display = 'none'; }, 1200);
-          }, 500);
-        }
-        bar.style.width = progress + '%';
-        percent.textContent = Math.round(progress) + '%';
-      }, 150);
+      // Real progress: tracks actual <img> elements loading on the page
+      const images = Array.from(document.images);
+      const total = images.length;
+      let loaded = 0;
+      let finished = false;
+
+      function updateProgress() {
+        const pct = total > 0 ? Math.round((loaded / total) * 100) : 100;
+        bar.style.width = pct + '%';
+        percent.textContent = pct + '%';
+        if (pct >= 100) finish();
+      }
+
+      function markLoaded() {
+        loaded++;
+        updateProgress();
+      }
+
+      function finish() {
+        if (finished) return;
+        finished = true;
+        setTimeout(function() {
+          screen.classList.add('hidden');
+          setTimeout(function() { screen.style.display = 'none'; }, 1200);
+        }, 300);
+      }
+
+      if (total === 0) {
+        updateProgress();
+      } else {
+        images.forEach(function(img) {
+          if (img.complete) {
+            markLoaded();
+          } else {
+            img.addEventListener('load', markLoaded);
+            img.addEventListener('error', markLoaded);
+          }
+        });
+      }
+
+      // Safety net: never let the loader hang forever on a slow/broken connection
+      setTimeout(finish, 6000);
     })();
 
     (function() {
@@ -1445,22 +1587,137 @@
       }
     })();
 
-    // Header image parallax on mouse move
+    // ========== SCROLL-SCRUBBING HEADER ANIMATION ==========
     (function() {
-      const headerWrapper = document.querySelector('.header-img-wrapper');
-      const headerImg = document.getElementById('header-img');
-      if (!headerWrapper || !headerImg) return;
+      const section = document.getElementById('scroll-anim-section');
+      const sticky = document.querySelector('.scroll-anim-sticky');
+      const canvas = document.getElementById('scrollAnimCanvas');
+      const loader = document.getElementById('scrollAnimLoader');
+      const hint = document.getElementById('scrollAnimHint');
+      const progressFill = document.getElementById('scrollAnimProgress');
+      if (!section || !canvas) return;
 
-      headerWrapper.addEventListener('mousemove', function(e) {
-        const rect = headerWrapper.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width - 0.5;
-        const y = (e.clientY - rect.top) / rect.height - 0.5;
-        headerImg.style.transform = 'scale(1.08) translate(' + (-x * 15) + 'px, ' + (-y * 10) + 'px)';
+      const ctx = canvas.getContext('2d');
+      const TOTAL_FRAMES = 240;
+      // Frames 1-99 live in header-frame-A, 100-198 in header-frame-B, 199-240 in header-frame-C
+      function framePath(n) {
+        const padded = String(n).padStart(3, '0');
+        let folder;
+        if (n <= 99) folder = 'header-frame-A';
+        else if (n <= 198) folder = 'header-frame-B';
+        else folder = 'header-frame-C';
+        return folder + '/ezgif-frame-' + padded + '.jpg';
+      }
+
+      const images = new Array(TOTAL_FRAMES + 1); // 1-indexed
+      const loadedFlags = new Array(TOTAL_FRAMES + 1).fill(false);
+      let loadedCount = 0;
+      let currentFrame = 1;
+      let highestLoadedSoFar = 0; // highest index loaded, for graceful fallback
+
+      function markLoaded(n) {
+        if (!loadedFlags[n]) {
+          loadedFlags[n] = true;
+          loadedCount++;
+        }
+        if (n > highestLoadedSoFar) highestLoadedSoFar = n;
+        if (n === 1) {
+          loader.classList.add('hidden');
+          drawFrame(1);
+        }
+      }
+
+      // Kick off loading of all frames (browser queues/parallelizes automatically)
+      for (let i = 1; i <= TOTAL_FRAMES; i++) {
+        const img = new Image();
+        img.decoding = 'async';
+        img.onload = function() { markLoaded(i); };
+        img.onerror = function() { markLoaded(i); }; // don't block sequence on a bad frame
+        img.src = framePath(i);
+        images[i] = img;
+      }
+
+      function resizeCanvas() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const rect = sticky.getBoundingClientRect();
+        canvas.width = Math.round(rect.width * dpr);
+        canvas.height = Math.round(rect.height * dpr);
+        drawFrame(currentFrame, true);
+      }
+
+      function nearestAvailableFrame(target) {
+        if (loadedFlags[target]) return target;
+        for (let d = 1; d < TOTAL_FRAMES; d++) {
+          if (target - d >= 1 && loadedFlags[target - d]) return target - d;
+          if (target + d <= TOTAL_FRAMES && loadedFlags[target + d]) return target + d;
+        }
+        return 1;
+      }
+
+      function drawFrame(requested, force) {
+        const frameToShow = nearestAvailableFrame(requested);
+        if (!force && frameToShow === currentFrame) return;
+        currentFrame = frameToShow;
+        const img = images[frameToShow];
+        if (!img || !img.complete || !img.naturalWidth) return;
+
+        const cw = canvas.width, ch = canvas.height;
+        const iw = img.naturalWidth, ih = img.naturalHeight;
+        const canvasRatio = cw / ch;
+        const imgRatio = iw / ih;
+        let sx, sy, sw, sh;
+        if (imgRatio > canvasRatio) {
+          // image wider than canvas -> crop left/right
+          sh = ih;
+          sw = ih * canvasRatio;
+          sx = (iw - sw) / 2;
+          sy = 0;
+        } else {
+          // image taller than canvas -> crop top/bottom
+          sw = iw;
+          sh = iw / canvasRatio;
+          sx = 0;
+          sy = (ih - sh) / 2;
+        }
+        ctx.clearRect(0, 0, cw, ch);
+        ctx.drawImage(img, sx, sy, sw, sh, 0, 0, cw, ch);
+      }
+
+      function updateFromScroll() {
+        const rect = section.getBoundingClientRect();
+        const scrollable = section.offsetHeight - window.innerHeight;
+        let progress = scrollable > 0 ? (-rect.top) / scrollable : 0;
+        progress = Math.max(0, Math.min(1, progress));
+
+        const inView = rect.top < window.innerHeight && rect.bottom > 0;
+        section.classList.toggle('in-view', inView);
+        section.classList.toggle('at-end', progress > 0.02);
+
+        const frameIndex = Math.max(1, Math.min(TOTAL_FRAMES, Math.round(progress * (TOTAL_FRAMES - 1)) + 1));
+        drawFrame(frameIndex);
+        if (progressFill) progressFill.style.width = (progress * 100) + '%';
+      }
+
+      let ticking = false;
+      function onScrollOrResize() {
+        if (!ticking) {
+          window.requestAnimationFrame(function() {
+            updateFromScroll();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }
+
+      window.addEventListener('scroll', onScrollOrResize, { passive: true });
+      window.addEventListener('resize', function() {
+        resizeCanvas();
+        updateFromScroll();
       });
 
-      headerWrapper.addEventListener('mouseleave', function() {
-        headerImg.style.transform = '';
-      });
+      // Initial setup
+      resizeCanvas();
+      updateFromScroll();
     })();
 
     // Profile 3D tilt on mouse move
